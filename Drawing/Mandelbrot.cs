@@ -75,7 +75,7 @@ namespace Drawing {
                                   System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             g = Graphics.FromImage(myBitmap);
             // Set the background of the form to white.
-            g.Clear(Color.White);
+            g.Clear(Color.FromArgb(46,51,73));
 
             // Hide controls that are not relevant until the first rendering has completed.
             zoomCheckbox.Hide();
@@ -583,11 +583,19 @@ namespace Drawing {
         // Button used to save bitmap at desired location. File type is defaulted as Portable Network Graphics.
         private void saveImageButton_Click(object sender, EventArgs e) {
             myBitmap.Save(@"C:\Users\" + userName + "\\mandelbrot_config\\Images\\" + saveImageTextBox.Text + ".png");
+            MessageBox.Show("image saved!");
+
+
         }
 
         // About label that shows information about author and program when clicked.
         private void aboutLabel_Click(object sender, EventArgs e) {
             MessageBox.Show("This program has been made by Muhammad Aaliyan and Syed Ehtesham");
+        }
+
+        private void exitbtn_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

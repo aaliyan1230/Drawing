@@ -15,7 +15,7 @@
             }
             base.Dispose(disposing);
         }
-
+    
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -39,6 +39,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.exitbtn = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.zoomTextBox = new System.Windows.Forms.TextBox();
             this.statusLabel = new System.Windows.Forms.Label();
@@ -74,6 +75,7 @@
             // 
             // pixelStepTextBox
             // 
+            this.pixelStepTextBox.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.pixelStepTextBox.Location = new System.Drawing.Point(18, 37);
             this.pixelStepTextBox.Name = "pixelStepTextBox";
             this.pixelStepTextBox.Size = new System.Drawing.Size(104, 20);
@@ -92,6 +94,7 @@
             // 
             // xMinCheckBox
             // 
+            this.xMinCheckBox.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.xMinCheckBox.Location = new System.Drawing.Point(14, 184);
             this.xMinCheckBox.Name = "xMinCheckBox";
             this.xMinCheckBox.Size = new System.Drawing.Size(56, 20);
@@ -100,6 +103,7 @@
             // 
             // xMaxCheckBox
             // 
+            this.xMaxCheckBox.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.xMaxCheckBox.Location = new System.Drawing.Point(73, 184);
             this.xMaxCheckBox.Name = "xMaxCheckBox";
             this.xMaxCheckBox.Size = new System.Drawing.Size(56, 20);
@@ -127,6 +131,7 @@
             // 
             // iterationCountTextBox
             // 
+            this.iterationCountTextBox.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.iterationCountTextBox.Location = new System.Drawing.Point(19, 82);
             this.iterationCountTextBox.Name = "iterationCountTextBox";
             this.iterationCountTextBox.Size = new System.Drawing.Size(103, 20);
@@ -153,6 +158,7 @@
             // 
             // yMinCheckBox
             // 
+            this.yMinCheckBox.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.yMinCheckBox.Location = new System.Drawing.Point(14, 135);
             this.yMinCheckBox.Name = "yMinCheckBox";
             this.yMinCheckBox.Size = new System.Drawing.Size(56, 20);
@@ -161,6 +167,7 @@
             // 
             // yMaxCheckBox
             // 
+            this.yMaxCheckBox.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.yMaxCheckBox.Location = new System.Drawing.Point(73, 135);
             this.yMaxCheckBox.Name = "yMaxCheckBox";
             this.yMaxCheckBox.Size = new System.Drawing.Size(56, 20);
@@ -188,6 +195,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.groupBox1.Controls.Add(this.exitbtn);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.zoomTextBox);
             this.groupBox1.Controls.Add(this.statusLabel);
@@ -215,6 +223,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Configuration";
             // 
+            // exitbtn
+            // 
+            this.exitbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
+            this.exitbtn.Location = new System.Drawing.Point(93, 8);
+            this.exitbtn.Name = "exitbtn";
+            this.exitbtn.Size = new System.Drawing.Size(45, 23);
+            this.exitbtn.TabIndex = 24;
+            this.exitbtn.Text = "Exit";
+            this.exitbtn.UseVisualStyleBackColor = false;
+            this.exitbtn.Click += new System.EventHandler(this.exitbtn_Click);
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -226,6 +245,7 @@
             // 
             // zoomTextBox
             // 
+            this.zoomTextBox.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.zoomTextBox.Location = new System.Drawing.Point(14, 226);
             this.zoomTextBox.Name = "zoomTextBox";
             this.zoomTextBox.Size = new System.Drawing.Size(108, 20);
@@ -359,8 +379,8 @@
             // 
             // saveImageTextBox
             // 
-            this.saveImageTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
-            this.saveImageTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.saveImageTextBox.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.saveImageTextBox.ForeColor = System.Drawing.Color.Black;
             this.saveImageTextBox.Location = new System.Drawing.Point(22, 35);
             this.saveImageTextBox.Name = "saveImageTextBox";
             this.saveImageTextBox.Size = new System.Drawing.Size(100, 20);
@@ -455,6 +475,7 @@
         private System.Windows.Forms.TextBox saveImageTextBox;
         private System.Windows.Forms.Button saveImageButton;
         private System.Windows.Forms.Label aboutLabel;
+        private System.Windows.Forms.Button exitbtn;
     }
 }
 
