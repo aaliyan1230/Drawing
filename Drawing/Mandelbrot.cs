@@ -8,6 +8,12 @@ using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
+using System.Drawing.Drawing2D;
+
+
+
+
+
 
 namespace Drawing {
     /// <summary>
@@ -15,6 +21,7 @@ namespace Drawing {
     /// with user controls allowing selection of the region to plot,
     /// resolution, maximum iteration count etc.
     /// </summary>
+    
     public partial class Mandelbrot : Form {
 
         /// <summary>
@@ -34,11 +41,20 @@ namespace Drawing {
         int nBottomRect,
         int nWidthEllipse,
         int nHeightEllipse
-
-
-
         );
-        
+        private void MakeLabelRounded()
+        {
+
+            GraphicsPath gp = new GraphicsPath();
+
+            gp.AddEllipse(0, 0, label1.Width, label1.Height);
+
+            label1.Region = new Region(gp);
+
+            label1.Invalidate();
+
+        }
+
 
         private ScreenPixelManage myPixelManager;                   // Used for conversions between maths and pixel coordinates.
         private ComplexPoint zoomCoord1 = new ComplexPoint(-1, 1);  // First point (lower-left) of zoom rectangle.
@@ -92,9 +108,7 @@ namespace Drawing {
                 string name = file.Name.Substring(0, file.Name.LastIndexOf(".txt", StringComparison.OrdinalIgnoreCase));
                 if (name.Equals("")) {
                     File.Delete(@"C:\Users\" + userName + "\\mandelbrot_config\\Fav\\.txt");
-                } else {
-                    favouritesComboBox.Items.Add(name);
-                }
+                } 
             }
 
             // Initialize undo.
@@ -467,16 +481,7 @@ namespace Drawing {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void addToFavourites_Click(object sender, EventArgs e) {
-            String promptValue = PromptForNewFavourite.ShowDialog("Name", "New Favourite");
-            
-            StreamWriter writer = new StreamWriter(@"C:\Users\" + userName + "\\mandelbrot_config\\Fav\\" + promptValue + ".txt");
-            writer.Write(pixelStepTextBox.Text + Environment.NewLine + iterationCountTextBox.Text + Environment.NewLine + yMinCheckBox.Text + Environment.NewLine + yMaxCheckBox.Text + Environment.NewLine + xMinCheckBox.Text + Environment.NewLine + xMaxCheckBox.Text);
-            writer.Close();
-            writer.Dispose();
-
-            favouritesComboBox.Items.Add(promptValue);
-        }
+ 
 
         /// <summary>
         /// This reads the selected text file, and sets the xMin xMax, yMin yMax text
@@ -484,17 +489,7 @@ namespace Drawing {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void openFavourites_Click(object sender, EventArgs e) {
-            var fileContent = File.ReadAllText(@"C:\Users\" + userName + "\\mandelbrot_config\\Fav\\" + favouritesComboBox.SelectedItem + ".txt");
-            var array = fileContent.Split((string[])null, StringSplitOptions.RemoveEmptyEntries);
-
-            pixelStepTextBox.Text = array[0];
-            iterationCountTextBox.Text = array[1];
-            yMinCheckBox.Text = array[2];
-            yMaxCheckBox.Text = array[3];
-            xMinCheckBox.Text = array[4];
-            xMaxCheckBox.Text = array[5];
-        }
+      
 
         /// <summary>
         /// When the dropdown list is opened, it will check for empty favourite names
@@ -502,17 +497,7 @@ namespace Drawing {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void favouritesComboBox_DropDown(object sender, EventArgs e) {
-            DirectoryInfo dinfo = new DirectoryInfo(@"C:\Users\" + userName + "\\mandelbrot_config\\Fav\\");
-            FileInfo[] Files = dinfo.GetFiles("*.txt");
-            foreach (FileInfo file in Files) {
-                string name = file.Name.Substring(0, file.Name.LastIndexOf(".txt", StringComparison.OrdinalIgnoreCase));
-                if (name.Equals("")) {
-                    File.Delete(@"C:\Users\" + userName + "\\mandelbrot_config\\Fav\\.txt");
-                    favouritesComboBox.Items.Remove(name);
-                }
-            }
-        }
+       
 
         /// <summary>
         /// When the undo button is clicked, the last settings are read from
@@ -596,6 +581,21 @@ namespace Drawing {
         private void exitbtn_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void statusLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

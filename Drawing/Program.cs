@@ -13,7 +13,7 @@ namespace Drawing {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Mandelbrot());
+            Application.Run(new mainn());
         }
     }
 }
