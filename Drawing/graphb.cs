@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Drawing
 {
-
+    
 
     public partial class graphb : Form
     {
@@ -22,6 +22,7 @@ namespace Drawing
             InitializeComponent();
             Graphics f = panelGraphFunction.CreateGraphics();
             g = f;
+            this.WindowState = FormWindowState.Maximized;
         }
 
         private void DrawBackGround()
@@ -53,14 +54,14 @@ namespace Drawing
             g.DrawLine(new Pen(Color.Black, 2), new Point(sizeX / 2 - 10, 0 + 10), new Point(sizeX / 2, 0));
             g.DrawLine(new Pen(Color.Black, 2), new Point(sizeX / 2 + 10, 0 + 10), new Point(sizeX / 2, 0));
 
-            for (int i = 40; i < sizeX; i += 80)
+            for (int i = 80; i < sizeX; i += 160)
             {
                 if (i == sizeX / 2) continue;
                 string st = (minX + i * ((maxX - minX) / sizeX)).ToString();
                 g.DrawLine(new Pen(Color.Black, 2), new Point(i, sizeY / 2 + 5), new Point(i, sizeY / 2 - 5));
                 g.DrawString(st, new Font("Arial", 8), new SolidBrush(Color.Black), new PointF(i - 15, sizeY / 2 + 4));
             }
-            for (int i = 40; i < sizeY; i += 80)
+            for (int i = 80; i < sizeY; i += 160)
             {
                 if (i == sizeY / 2) continue;
                 string st = (minX + (sizeY - i) * ((maxY - minY) / sizeY)).ToString();
@@ -86,45 +87,68 @@ namespace Drawing
 
         }
         Point pt1 = new Point();
-       // private Point comp_to_pt(ComplexPoint cmp)
+        ComplexPoint initial = new ComplexPoint(0.0, 0.0);
+        ComplexPoint const_comp = new ComplexPoint(0.0, 0.0);
+        private Point comp_to_pt(ComplexPoint cmp)
+        {
+            Point return_pt = new Point();
+            int X = Convert.ToInt32( cmp.x * 100);
+            X += 400;
+            int Y = Convert.ToInt32(cmp.y * 100);
+            Y += 400;
+            return_pt.X = X;
+            return_pt.Y = Y;
+
+            return return_pt;
+
+        }
+
+        private ComplexPoint pt_to_comp(Point pt)
+        {
+            ComplexPoint cmp_pt = new ComplexPoint(0.0,0.0);
+            pt.X -= 400;
+            double x = Convert.ToDouble(pt.X);
+            x /= 100.00;
+            pt.Y -= 400;
+            double y = Convert.ToDouble(pt.Y);
+            y /= -100.00;
+            cmp_pt.x = x;
+            cmp_pt.y = y;
+
+            return cmp_pt;
+        }
         
        
         private void panelGraphFunction_MouseDown(object sender, MouseEventArgs e)
         {
             pt1 = e.Location;
+            ComplexPoint comp = pt_to_comp(pt1);//c
+            //z
 
-
-            pt1.X -= 200;
-            double x = Convert.ToDouble(pt1.X);
-            x /= 100.00;
-            pt1.Y -= 200;
-            double y = Convert.ToDouble(pt1.Y);
-            y /= -100.00;
            
+            Pen pp = new Pen(Color.Red, 1);
+            Brush brush = new SolidBrush(Color.Black);
+           
+            g.FillEllipse(brush, e.X-2, e.Y-2, 5, 5);
+            Point initial_pt = comp_to_pt(initial);
+            g.DrawLine(pp, 400, 400, pt1.X, pt1.Y);
+            for (int i = 0; i < 40; i++)
+            {
+                initial_pt = comp_to_pt(initial);
+                g.FillEllipse(brush, initial_pt.X-2, initial_pt.Y-2, 5, 5);
+               
+                g.DrawLine(pp, initial_pt.X, initial_pt.Y, pt1.X,pt1.Y);
+                pt1 = initial_pt;
+                initial = initial.doCmplxSq();
+                initial = initial.doCmplxAdd(comp);
+                
 
-            Pen pp = new Pen(Color.Red, 2);
-            Brush brush = new SolidBrush(Color.Red);
-            g.FillEllipse(brush,e.X,e.Y,10,10);
-            MessageBox.Show(x.ToString() + " , " + y.ToString());
+            }
+
+
+
             
 
-            /* Rectangle ellipseBounds = new Rectangle(pt1.X, pt1.Y, pt1.X+5, pt1.Y+5); //like in your code sample
-             using (Brush brush = new SolidBrush(Color.Red))
-             {
-                 g.FillPie(brush, ellipseBounds, pt1.X,pt1.Y); //for example, do it before drawing lines.
-                 g.DrawEllipse(pp, ellipseBounds);
-
-                 Rectangle r = new Rectangle();
-                 r.Location = pt1;
-                 //r.X = pt1.X;
-                 //r.Y= pt1.Y;
-                 g.DrawEllipse(pp, r);
-
-
-
-
-             }
-            */
         }
     }
 }

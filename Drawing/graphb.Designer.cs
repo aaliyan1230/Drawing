@@ -35,16 +35,16 @@ namespace Drawing
             // 
             // panelGraphFunction
             // 
-            this.panelGraphFunction.Location = new System.Drawing.Point(118, 1);
+            this.panelGraphFunction.Location = new System.Drawing.Point(40, 1);
             this.panelGraphFunction.Name = "panelGraphFunction";
-            this.panelGraphFunction.Size = new System.Drawing.Size(400, 400);
+            this.panelGraphFunction.Size = new System.Drawing.Size(800, 800);
             this.panelGraphFunction.TabIndex = 0;
             this.panelGraphFunction.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             this.panelGraphFunction.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelGraphFunction_MouseDown);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(727, 262);
+            this.button1.Location = new System.Drawing.Point(12, 55);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(64, 20);
             this.button1.TabIndex = 1;
@@ -56,7 +56,7 @@ namespace Drawing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(816, 564);
+            this.ClientSize = new System.Drawing.Size(884, 749);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.panelGraphFunction);
             this.Name = "graphb";
