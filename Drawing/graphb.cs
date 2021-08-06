@@ -86,11 +86,8 @@ namespace Drawing
 
         }
         Point pt1 = new Point();
-        private Point comp_to_pt(ComplexPoint cmp)
-        {
-            Point return_pt = new Point();
-
-        }
+       // private Point comp_to_pt(ComplexPoint cmp)
+        
        
         private void panelGraphFunction_MouseDown(object sender, MouseEventArgs e)
         {
