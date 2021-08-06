@@ -86,7 +86,18 @@ namespace Drawing
 
         }
         Point pt1 = new Point();
-       // private Point comp_to_pt(ComplexPoint cmp)
+        private Point comp_to_pt(ComplexPoint cmp)
+        {
+            Point return_pt = new Point();
+            int X = Convert.ToInt32(cmp.x * 100);
+            X += 200;
+            int Y = Convert.ToInt32(cmp.y * 100);
+            Y += 200;
+            return_pt.X = X;
+            return_pt.Y = Y;
+
+            return return_pt;
+        }
         
        
         private void panelGraphFunction_MouseDown(object sender, MouseEventArgs e)
