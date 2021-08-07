@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Drawing {
-    partial class Mandelbrot {
+    partial class julia {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -25,7 +25,7 @@ namespace Drawing {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Mandelbrot));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(julia));
             this.generatePatternButton = new System.Windows.Forms.Button();
             this.pixelStepTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -52,6 +52,8 @@ namespace Drawing {
             this.fileNameLabel = new System.Windows.Forms.Label();
             this.saveImageTextBox = new System.Windows.Forms.TextBox();
             this.saveImageButton = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -103,7 +105,7 @@ namespace Drawing {
             this.xMaxCheckBox.Name = "xMaxCheckBox";
             this.xMaxCheckBox.Size = new System.Drawing.Size(83, 20);
             this.xMaxCheckBox.TabIndex = 14;
-            this.xMaxCheckBox.Text = "1";
+            this.xMaxCheckBox.Text = "2";
             // 
             // zoomCheckbox
             // 
@@ -131,7 +133,8 @@ namespace Drawing {
             this.iterationCountTextBox.Name = "iterationCountTextBox";
             this.iterationCountTextBox.Size = new System.Drawing.Size(103, 20);
             this.iterationCountTextBox.TabIndex = 5;
-            this.iterationCountTextBox.Text = "85";
+            this.iterationCountTextBox.Text = "8500";
+            this.iterationCountTextBox.TextChanged += new System.EventHandler(this.iterationCountTextBox_TextChanged);
             // 
             // label3
             // 
@@ -343,19 +346,39 @@ namespace Drawing {
             this.saveImageButton.UseVisualStyleBackColor = false;
             this.saveImageButton.Click += new System.EventHandler(this.saveImageButton_Click);
             // 
-            // Mandelbrot
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.textBox1.Location = new System.Drawing.Point(755, 49);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(83, 20);
+            this.textBox1.TabIndex = 25;
+            this.textBox1.Text = "-0.7";
+            // 
+            // textBox2
+            // 
+            this.textBox2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.textBox2.Location = new System.Drawing.Point(755, 92);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(83, 20);
+            this.textBox2.TabIndex = 26;
+            this.textBox2.Text = "0.27015";
+            // 
+            // julia
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(989, 652);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.exitbtn);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Mandelbrot";
+            this.Name = "julia";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mandelbrot";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -369,6 +392,7 @@ namespace Drawing {
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -415,6 +439,8 @@ namespace Drawing {
         private System.Windows.Forms.TextBox saveImageTextBox;
         private System.Windows.Forms.Button saveImageButton;
         private System.Windows.Forms.Button exitbtn;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
     }
 }
 

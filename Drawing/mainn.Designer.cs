@@ -35,6 +35,7 @@ namespace Drawing
             this.button3 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -46,7 +47,7 @@ namespace Drawing
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(163, 49);
             this.button1.TabIndex = 0;
-            this.button1.Text = "mandelbrott";
+            this.button1.Text = "mandelbrot";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -72,7 +73,7 @@ namespace Drawing
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(163, 40);
             this.button3.TabIndex = 2;
-            this.button3.Text = "graph";
+            this.button3.Text = "argand diagram";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -100,12 +101,26 @@ namespace Drawing
             this.label2.Text = "MANDELBROTT SET";
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.button4.Font = new System.Drawing.Font("Showcard Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.button4.Location = new System.Drawing.Point(306, 351);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(163, 49);
+            this.button4.TabIndex = 5;
+            this.button4.Text = "JULIA";
+            this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // mainn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
@@ -128,5 +143,6 @@ namespace Drawing
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button4;
     }
 }

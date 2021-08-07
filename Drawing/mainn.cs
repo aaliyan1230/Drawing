@@ -64,6 +64,12 @@ namespace Drawing
         {
 
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            julia j = new julia();
+            j.Show();
+        }
     }
     
 }

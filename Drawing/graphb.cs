@@ -160,7 +160,7 @@ namespace Drawing
                
 
 
-                    for (int i = 0; i < 40; i++)
+                    for (int i = 0; i < Convert.ToInt32(textbox1.Text); i++)
                     {
                     if (i==0)
                     {
@@ -168,7 +168,7 @@ namespace Drawing
                     }
                     else if (i==1)
                     {
-                        brush = new SolidBrush(Color.FromArgb(105,53,53));
+                        brush = new SolidBrush(Color.FromArgb(90,196,90));
                     }
                     else
                     {
@@ -217,6 +217,11 @@ namespace Drawing
         private void button1_Click_1(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

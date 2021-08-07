@@ -22,12 +22,12 @@ namespace Drawing {
     /// resolution, maximum iteration count etc.
     /// </summary>
     
-    public partial class Mandelbrot : Form {
+    public partial class julia : Form {
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public Mandelbrot() {
+        public julia() {
             InitializeComponent();
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
         }
@@ -194,11 +194,11 @@ namespace Drawing {
                 for (double y = yMin; y < yMax; y += xyStep.y) {
                     int xPix = 0;
                     for (double x = xMin; x < xMax; x += xyStep.x) {
-                        // Create complex point C = x + i*y.
+                        // Initialise complex value Zk.
                         ComplexPoint zk = new ComplexPoint(x, y);
 
-                        // Initialise complex value Zk.
-                        ComplexPoint c = new ComplexPoint(-0.7, 0.27015);
+                        // Create complex point C = x + i*y.
+                        ComplexPoint c = new ComplexPoint(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text));
 
                         // Do the main Mandelbrot calculation. Iterate until the equation
                         // converges or the maximum number of iterations is reached.
@@ -514,7 +514,7 @@ namespace Drawing {
                 for (int i = 0; i < nColour; i++) {
                     double colourIndex = ((double) i) / nColour;
                     double hue = Math.Pow(colourIndex, 0.25);
-                    colourTable[i] = colorFromHSLA(hue, 0.9, 0.6);
+                    colourTable[i] = colorFromHSLA(hue, 0.9, 0.5);
                 }
             }
 
@@ -540,6 +540,8 @@ namespace Drawing {
             //myBitmap.Save(@"C:\Users\" + userName + "\\mandelbrot_config\\Images\\" + saveImageTextBox.Text + ".png");
             myBitmap.Save(@"D:\\c#\\Mandelbrot\\images\\" + saveImageTextBox.Text + ".png");
             MessageBox.Show("image saved!");
+            saveImageTextBox.Clear();
+            
         }
 
         // About label that shows information about author and program when clicked.
@@ -563,6 +565,11 @@ namespace Drawing {
         }
 
         private void statusLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void iterationCountTextBox_TextChanged(object sender, EventArgs e)
         {
 
         }

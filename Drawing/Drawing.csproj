@@ -56,6 +56,12 @@
     <Compile Include="graphb.Designer.cs">
       <DependentUpon>graphb.cs</DependentUpon>
     </Compile>
+    <Compile Include="julia.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="julia.Designer.cs">
+      <DependentUpon>julia.cs</DependentUpon>
+    </Compile>
     <Compile Include="mainn.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,6 +89,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GraphicalOverlay.resx">
       <DependentUpon>GraphicalOverlay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="julia.resx">
+      <DependentUpon>julia.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="mainn.resx">
       <DependentUpon>mainn.cs</DependentUpon>
