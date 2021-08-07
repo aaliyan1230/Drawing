@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using System.Runtime.InteropServices;
 
 namespace Drawing
 {
-    
+
 
     public partial class graphb : Form
     {
@@ -23,10 +24,24 @@ namespace Drawing
             Graphics f = panelGraphFunction.CreateGraphics();
             g = f;
             this.WindowState = FormWindowState.Maximized;
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
+            DrawBackGround();
         }
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+
+        private static extern IntPtr CreateRoundRectRgn
+      (
+          int nLeftRect,
+          int nTopRect,
+      int nRightRect,
+      int nBottomRect,
+      int nWidthEllipse,
+      int nHeightEllipse
+      );
 
         private void DrawBackGround()
         {
+             
             int sizeX = panelGraphFunction.Size.Width;
             int sizeY = panelGraphFunction.Size.Height;
 
@@ -92,10 +107,10 @@ namespace Drawing
         private Point comp_to_pt(ComplexPoint cmp)
         {
             Point return_pt = new Point();
-            int X = Convert.ToInt32( cmp.x * 100);
-            X += 400;
-            int Y = Convert.ToInt32(cmp.y * 100);
-            Y += 400;
+            int X = Convert.ToInt32(cmp.x * 150);
+            X += 300;
+            int Y = Convert.ToInt32(cmp.y * 150);
+            Y += 300;
             return_pt.X = X;
             return_pt.Y = Y;
 
@@ -105,50 +120,89 @@ namespace Drawing
 
         private ComplexPoint pt_to_comp(Point pt)
         {
-            ComplexPoint cmp_pt = new ComplexPoint(0.0,0.0);
-            pt.X -= 400;
+            ComplexPoint cmp_pt = new ComplexPoint(0.0, 0.0);
+            pt.X -= 300;
             double x = Convert.ToDouble(pt.X);
-            x /= 100.00;
-            pt.Y -= 400;
+            x /= 150.00;
+            pt.Y -= 300;
             double y = Convert.ToDouble(pt.Y);
-            y /= -100.00;
+            y /= 150.00;
             cmp_pt.x = x;
             cmp_pt.y = y;
 
             return cmp_pt;
         }
+
         
-       
         private void panelGraphFunction_MouseDown(object sender, MouseEventArgs e)
         {
-            pt1 = e.Location;
-            ComplexPoint comp = pt_to_comp(pt1);//c
-            //z
-
-           
-            Pen pp = new Pen(Color.Red, 1);
-            Brush brush = new SolidBrush(Color.Black);
-           
-            g.FillEllipse(brush, e.X-2, e.Y-2, 5, 5);
-            Point initial_pt = comp_to_pt(initial);
-            g.DrawLine(pp, 400, 400, pt1.X, pt1.Y);
-            for (int i = 0; i < 40; i++)
+            try
             {
-                initial_pt = comp_to_pt(initial);
-                g.FillEllipse(brush, initial_pt.X-2, initial_pt.Y-2, 5, 5);
-               
-                g.DrawLine(pp, initial_pt.X, initial_pt.Y, pt1.X,pt1.Y);
-                pt1 = initial_pt;
-                initial = initial.doCmplxSq();
-                initial = initial.doCmplxAdd(comp);
-                
+                this.Refresh();
+                DrawBackGround();
 
+                pt1 = e.Location;
+                ComplexPoint comp = pt_to_comp(pt1);//c
+                                                    //z
+
+
+                Pen pp = new Pen(Color.Red, 1);
+                Brush brush = new SolidBrush(Color.Black);
+
+                g.FillEllipse(brush, e.X - 2, e.Y - 2, 5, 5);
+                initial = new ComplexPoint(0.0, 0.0);
+                Point initial_pt = comp_to_pt(initial);
+                g.DrawLine(pp, 300, 300, pt1.X, pt1.Y);
+               
+
+
+                    for (int i = 0; i < 40; i++)
+                    {
+
+                    
+                        initial_pt = comp_to_pt(initial);
+                        g.FillEllipse(brush, initial_pt.X - 2, initial_pt.Y - 2, 5, 5);
+
+                        g.DrawLine(pp, initial_pt.X, initial_pt.Y, pt1.X, pt1.Y);
+                        pt1 = initial_pt;
+                        initial = initial.doCmplxSq();
+                        initial = initial.doCmplxAdd(comp);
+
+                    }
+                
+                
             }
 
 
+            catch (System.OverflowException)
+            {
 
-            
+               
+                MessageBox.Show("points out of the boundary of graph, please enter plottable points");
+                this.Refresh();
+                panelGraphFunction.Refresh();
+                Graphics f = panelGraphFunction.CreateGraphics();
+                g = f;
 
+                this.Refresh();
+                DrawBackGround();
+                
+            }
+        }
+
+        private void panelGraphFunction_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void panelGraphFunction_MouseMove(object sender, MouseEventArgs e)
+        {
+           
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
