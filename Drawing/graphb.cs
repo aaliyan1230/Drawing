@@ -54,11 +54,11 @@ namespace Drawing
 
             g.Clear(Color.White);
 
-            for (int i = 0; i < sizeX; i += 40)
+            for (int i = 0; i < sizeX; i += 60)
             {
                 g.DrawLine(new Pen(Color.Blue), new Point(i, 0), new Point(i, sizeY));
             }
-            for (int i = 0; i < sizeY; i += 40)
+            for (int i = 0; i < sizeY; i += 60)
             {
                 g.DrawLine(new Pen(Color.Blue), new Point(0, i), new Point(sizeX, i));
             }
@@ -68,15 +68,16 @@ namespace Drawing
             g.DrawLine(new Pen(Color.Black), new Point(sizeX / 2, 0), new Point(sizeX / 2, sizeY));
             g.DrawLine(new Pen(Color.Black, 2), new Point(sizeX / 2 - 10, 0 + 10), new Point(sizeX / 2, 0));
             g.DrawLine(new Pen(Color.Black, 2), new Point(sizeX / 2 + 10, 0 + 10), new Point(sizeX / 2, 0));
-
-            for (int i = 80; i < sizeX; i += 160)
+            //for x axis
+            for (int i = 30; i < sizeX; i += 60)
             {
                 if (i == sizeX / 2) continue;
                 string st = (minX + i * ((maxX - minX) / sizeX)).ToString();
                 g.DrawLine(new Pen(Color.Black, 2), new Point(i, sizeY / 2 + 5), new Point(i, sizeY / 2 - 5));
                 g.DrawString(st, new Font("Arial", 8), new SolidBrush(Color.Black), new PointF(i - 15, sizeY / 2 + 4));
             }
-            for (int i = 80; i < sizeY; i += 160)
+            //for y axis
+            for (int i = 30; i < sizeY; i += 60)
             {
                 if (i == sizeY / 2) continue;
                 string st = (minX + (sizeY - i) * ((maxY - minY) / sizeY)).ToString();
@@ -147,10 +148,12 @@ namespace Drawing
 
 
                 Pen pp = new Pen(Color.Red, 1);
-        /*        Brush brush1 = new SolidBrush(*//*Color.MidnightBlue*//*);
-                Brush brush2 = new SolidBrush(*//*Color.MediumSpringGreen*//*);*/
-                Brush brush1 = new SolidBrush(Color.Black);
-                g.FillEllipse(brush1, e.X - 2, e.Y - 2, 5, 5);
+                Brush brush = new SolidBrush(Color.Black);
+               
+
+
+               // g.FillEllipse(brush, e.X - 2, e.Y - 2, 5, 5);
+              
                 initial = new ComplexPoint(0.0, 0.0);
                 Point initial_pt = comp_to_pt(initial);
                 g.DrawLine(pp, 300, 300, pt1.X, pt1.Y);
@@ -159,23 +162,21 @@ namespace Drawing
 
                     for (int i = 0; i < 40; i++)
                     {
-                        if (i==0)
-                          {
-                           brush1 = new SolidBrush(Color.Red);
-                             }
-                      else if (i==1)
-                         {
-                                 Brush brush2 = new SolidBrush(Color.Yellow);
-                             }
-                         else
-                         {
-                       Brush brush3 = new SolidBrush(Color.Black);
-                       
-                         }
+                    if (i==0)
+                    {
+                        brush = new SolidBrush(Color.Gold);
+                    }
+                    else if (i==1)
+                    {
+                        brush = new SolidBrush(Color.FromArgb(105,53,53));
+                    }
+                    else
+                    {
+                        brush = new SolidBrush(Color.Black);
+                    }
                     
                         initial_pt = comp_to_pt(initial);
-                        g.FillEllipse(brush1, initial_pt.X - 2, initial_pt.Y - 2, 5, 5);
-
+                        g.FillEllipse(brush, initial_pt.X - 2, initial_pt.Y - 2, 5, 5);
                         g.DrawLine(pp, initial_pt.X, initial_pt.Y, pt1.X, pt1.Y);
                         pt1 = initial_pt;
                         initial = initial.doCmplxSq();

@@ -29,6 +29,7 @@ namespace Drawing
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(graphb));
             this.panelGraphFunction = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -68,6 +69,7 @@ namespace Drawing
             this.Controls.Add(this.button1);
             this.Controls.Add(this.panelGraphFunction);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "graphb";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
