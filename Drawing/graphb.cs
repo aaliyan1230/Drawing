@@ -147,9 +147,10 @@ namespace Drawing
 
 
                 Pen pp = new Pen(Color.Red, 1);
-                Brush brush = new SolidBrush(Color.Black);
-
-                g.FillEllipse(brush, e.X - 2, e.Y - 2, 5, 5);
+        /*        Brush brush1 = new SolidBrush(*//*Color.MidnightBlue*//*);
+                Brush brush2 = new SolidBrush(*//*Color.MediumSpringGreen*//*);*/
+                Brush brush1 = new SolidBrush(Color.Black);
+                g.FillEllipse(brush1, e.X - 2, e.Y - 2, 5, 5);
                 initial = new ComplexPoint(0.0, 0.0);
                 Point initial_pt = comp_to_pt(initial);
                 g.DrawLine(pp, 300, 300, pt1.X, pt1.Y);
@@ -158,10 +159,22 @@ namespace Drawing
 
                     for (int i = 0; i < 40; i++)
                     {
-
+                        if (i==0)
+                          {
+                           brush1 = new SolidBrush(Color.Red);
+                             }
+                      else if (i==1)
+                         {
+                                 Brush brush2 = new SolidBrush(Color.Yellow);
+                             }
+                         else
+                         {
+                       Brush brush3 = new SolidBrush(Color.Black);
+                       
+                         }
                     
                         initial_pt = comp_to_pt(initial);
-                        g.FillEllipse(brush, initial_pt.X - 2, initial_pt.Y - 2, 5, 5);
+                        g.FillEllipse(brush1, initial_pt.X - 2, initial_pt.Y - 2, 5, 5);
 
                         g.DrawLine(pp, initial_pt.X, initial_pt.Y, pt1.X, pt1.Y);
                         pt1 = initial_pt;
