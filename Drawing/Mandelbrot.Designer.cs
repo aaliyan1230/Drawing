@@ -42,8 +42,10 @@ namespace Drawing {
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.statusLabel = new System.Windows.Forms.Label();
+            this.rdb = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.zoomTextBox = new System.Windows.Forms.TextBox();
+            this.dbb = new System.Windows.Forms.Button();
             this.undoButton = new System.Windows.Forms.Button();
             this.exitbtn = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -53,15 +55,17 @@ namespace Drawing {
             this.saveImageTextBox = new System.Windows.Forms.TextBox();
             this.saveImageButton = new System.Windows.Forms.Button();
             this.aboutLabel = new System.Windows.Forms.Label();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // generatePatternButton
             // 
             this.generatePatternButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
-            this.generatePatternButton.Location = new System.Drawing.Point(57, 351);
+            this.generatePatternButton.Location = new System.Drawing.Point(57, 343);
             this.generatePatternButton.Name = "generatePatternButton";
             this.generatePatternButton.Size = new System.Drawing.Size(81, 57);
             this.generatePatternButton.TabIndex = 0;
@@ -194,8 +198,10 @@ namespace Drawing {
             // 
             this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
             this.groupBox1.Controls.Add(this.statusLabel);
+            this.groupBox1.Controls.Add(this.rdb);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.zoomTextBox);
+            this.groupBox1.Controls.Add(this.dbb);
             this.groupBox1.Controls.Add(this.undoButton);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.generatePatternButton);
@@ -224,12 +230,25 @@ namespace Drawing {
             // statusLabel
             // 
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(2, 422);
+            this.statusLabel.Location = new System.Drawing.Point(1, 400);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(47, 13);
             this.statusLabel.TabIndex = 24;
             this.statusLabel.Text = "Status:";
             this.statusLabel.Click += new System.EventHandler(this.statusLabel_Click);
+            // 
+            // rdb
+            // 
+            this.rdb.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
+            this.rdb.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rdb.Location = new System.Drawing.Point(22, 441);
+            this.rdb.Name = "rdb";
+            this.rdb.Size = new System.Drawing.Size(95, 23);
+            this.rdb.TabIndex = 28;
+            this.rdb.Text = "Retrieve";
+            this.rdb.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.rdb.UseVisualStyleBackColor = false;
+            this.rdb.Click += new System.EventHandler(this.rdb_Click);
             // 
             // label8
             // 
@@ -250,13 +269,25 @@ namespace Drawing {
             this.zoomTextBox.TabIndex = 25;
             this.zoomTextBox.Text = "7";
             // 
+            // dbb
+            // 
+            this.dbb.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
+            this.dbb.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.dbb.Location = new System.Drawing.Point(22, 415);
+            this.dbb.Name = "dbb";
+            this.dbb.Size = new System.Drawing.Size(95, 24);
+            this.dbb.TabIndex = 25;
+            this.dbb.Text = "Save";
+            this.dbb.UseVisualStyleBackColor = false;
+            this.dbb.Click += new System.EventHandler(this.dbb_Click);
+            // 
             // undoButton
             // 
             this.undoButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.undoButton.BackgroundImage = global::Drawing.Properties.Resources.undo_4_xxl;
             this.undoButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.undoButton.ImageKey = "(none)";
-            this.undoButton.Location = new System.Drawing.Point(6, 359);
+            this.undoButton.Location = new System.Drawing.Point(6, 351);
             this.undoButton.Name = "undoButton";
             this.undoButton.Size = new System.Drawing.Size(41, 41);
             this.undoButton.TabIndex = 23;
@@ -347,13 +378,23 @@ namespace Drawing {
             // aboutLabel
             // 
             this.aboutLabel.AutoSize = true;
-            this.aboutLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.aboutLabel.Location = new System.Drawing.Point(-1, 636);
+            this.aboutLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.aboutLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.aboutLabel.Location = new System.Drawing.Point(12, 633);
             this.aboutLabel.Name = "aboutLabel";
-            this.aboutLabel.Size = new System.Drawing.Size(35, 13);
+            this.aboutLabel.Size = new System.Drawing.Size(43, 16);
             this.aboutLabel.TabIndex = 23;
             this.aboutLabel.Text = "About";
             this.aboutLabel.Click += new System.EventHandler(this.aboutLabel_Click);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(54, 70);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(540, 386);
+            this.dataGridView1.TabIndex = 30;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // Mandelbrot
             // 
@@ -361,6 +402,7 @@ namespace Drawing {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(989, 652);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.exitbtn);
             this.Controls.Add(this.aboutLabel);
             this.Controls.Add(this.groupBox4);
@@ -381,6 +423,7 @@ namespace Drawing {
             this.groupBox2.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -430,6 +473,9 @@ namespace Drawing {
         private System.Windows.Forms.Button saveImageButton;
         private System.Windows.Forms.Label aboutLabel;
         private System.Windows.Forms.Button exitbtn;
+        private System.Windows.Forms.Button dbb;
+        private System.Windows.Forms.Button rdb;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }
 
