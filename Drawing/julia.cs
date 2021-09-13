@@ -356,7 +356,7 @@ namespace Drawing {
             return color;
         }
 
-     
+      
         /// On-click handler for main form. Defines the points (lower-left and upper-right)
         /// of a zoom rectangle.
      
@@ -418,11 +418,29 @@ namespace Drawing {
                 RenderImage();
             }
         }
+        private void undo_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var fileContent = File.ReadAllText(@"C:\Users\" + userName + "\\mandelbrot_config\\Undo\\undo" + (undoNum -= 1) + ".txt");
+                var array1 = fileContent.Split((string[])null, StringSplitOptions.RemoveEmptyEntries);
 
-  
+                pixelStepTextBox.Text = array1[0];
+                iterationCountTextBox.Text = array1[1];
+                yMinCheckBox.Text = array1[2];
+                yMaxCheckBox.Text = array1[3];
+                xMinCheckBox.Text = array1[4];
+                xMaxCheckBox.Text = array1[5];
+            }
+            catch (Exception e3)
+            {
+                MessageBox.Show("Unable to Undo: " + e3.Message, "Error");
+            }
+        }
+
         /// This will apply the zoom rectangle coordinates to the
         /// yMin yMax, xMin xMax text boxes.
-      
+
         private void button2_Click(object sender, EventArgs e) {
             yMinCheckBox.Text = Convert.ToString(zoomCoord1.y);
             yMaxCheckBox.Text = Convert.ToString(zoomCoord2.y);
