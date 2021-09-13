@@ -263,7 +263,7 @@ namespace Drawing {
             this.undoButton.Size = new System.Drawing.Size(41, 41);
             this.undoButton.TabIndex = 23;
             this.undoButton.UseVisualStyleBackColor = false;
-            this.undoButton.Click += new System.EventHandler(this.undo_Click);
+         
             // 
             // exitbtn
             // 

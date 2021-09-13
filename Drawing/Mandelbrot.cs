@@ -12,15 +12,12 @@ using System.Drawing.Drawing2D;
 
 
 
-
-
-
 namespace Drawing {
-    /// <summary>
+
     /// Mandelbrot class extends Form, used to render the Mandelbrot set,
     /// with user controls allowing selection of the region to plot,
     /// resolution, maximum iteration count etc.
-    /// </summary>
+  
     
     public partial class Mandelbrot : Form {
 
@@ -275,20 +272,16 @@ namespace Drawing {
                 stopwatchLabel.Text = Convert.ToString(sw.Elapsed.TotalSeconds);
                 statusLabel.Text = "Status: Render complete";
 
-                // Save current settings to undo file.
-                StreamWriter writer = new StreamWriter(@"C:\Users\" + userName + "\\mandelbrot_config\\Undo\\undo" + undoNum + ".txt");
-                writer.Write(pixelStepTextBox.Text + Environment.NewLine + iterationCountTextBox.Text + Environment.NewLine + yMinCheckBox.Text + Environment.NewLine + yMaxCheckBox.Text + Environment.NewLine + xMinCheckBox.Text + Environment.NewLine + xMaxCheckBox.Text);
-                writer.Close();
-                writer.Dispose();
+               
             } catch (Exception e2) {
                 MessageBox.Show("Exception Trapped: " + e2.Message, "Error");
                 statusLabel.Text = "Status: Error";
             }
         }
 
-        /// <summary>
+   
         /// Convert HSL colour value to Color object.
-        /// </summary>
+ 
         /// <param name="H">Hue</param>
         /// <param name="S">Saturation</param>
         /// <param name="L">Lightness</param>
@@ -302,8 +295,7 @@ namespace Drawing {
             b = L;
 
             // Standard HSL to RGB conversion. This is described in
-            // detail at:
-            // http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
+           
             v = (L <= 0.5) ? (L * (1.0 + S)) : (L + S - L * S);
 
             if (v > 0) {
@@ -365,12 +357,11 @@ namespace Drawing {
             return color;
         }
 
-        /// <summary>
+  
         /// On-click handler for main form. Defines the points (lower-left and upper-right)
         /// of a zoom rectangle.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+    
+  
         private void mouseClickOnForm(object sender, MouseEventArgs e) {
             if (zoomCheckbox.Checked) {
                 Pen box = new Pen(Color.Black);
@@ -432,12 +423,10 @@ namespace Drawing {
             }
         }
 
-        /// <summary>
+    
         /// This will apply the zoom rectangle coordinates to the
         /// yMin yMax, xMin xMax text boxes.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        
         private void button2_Click(object sender, EventArgs e) {
             yMinCheckBox.Text = Convert.ToString(zoomCoord1.y);
             yMaxCheckBox.Text = Convert.ToString(zoomCoord2.y);
@@ -445,36 +434,21 @@ namespace Drawing {
             xMaxCheckBox.Text = Convert.ToString(zoomCoord2.x);
         }
 
-        /// <summary>
-        /// This will prompt for a favourite name, and then save the current
-        /// settings to a text file so they can be used again.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
- 
-
-        /// <summary>
+       
         /// This reads the selected text file, and sets the xMin xMax, yMin yMax text
         /// boxes to the coordinates in the text file.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
       
 
-        /// <summary>
+       
         /// When the dropdown list is opened, it will check for empty favourite names
         /// and delete them.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+      
        
 
-        /// <summary>
+        
         /// When the undo button is clicked, the last settings are read from
         /// the last undo text file, and the text boxes are set to these settings.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+       
         private void undo_Click(object sender, EventArgs e) {
             try {
                 var fileContent = File.ReadAllText(@"C:\Users\" + userName + "\\mandelbrot_config\\Undo\\undo" + (undoNum -= 1) + ".txt");
@@ -491,9 +465,9 @@ namespace Drawing {
             }
         }
 
-        /// <summary>
+
         /// Class used for colour lookup table.
-        /// </summary>
+   
         private class ColourTable {
             public int kMax;
             public int nColour;
@@ -518,11 +492,9 @@ namespace Drawing {
                 }
             }
 
-            /// <summary>
+
             /// Retrieve the colour from iteration count k.
-            /// </summary>
-            /// <param name="k"></param>
-            /// <returns></returns>
+    
             public Color GetColour(int k) {
                 return colourTable[k];
             } 

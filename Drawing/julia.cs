@@ -9,7 +9,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
-
+using System.Data.OleDb;
 
 
 
@@ -169,18 +169,14 @@ namespace Drawing {
                 // converting from mathemathical to screen (pixel units) using the
                 myPixelManager = new ScreenPixelManage(g, screenBottomLeft, screenTopRight);
 
-                // The pixel step size defines the increment in screen pixels for each point
-                // at which the Mandelbrot calcualtion will be done. e.g. a Step of 5 means
-                // that the calcualtion will be done a 5-pixel increments. The X & Y increments
-                // are the same.
-                //
+               
                 // This increment is converted to mathematical coordinates.
                 int xyPixelStep = Convert.ToInt16(pixelStepTextBox.Text);
                 ComplexPoint pixelStep = new ComplexPoint(xyPixelStep, xyPixelStep);
                 ComplexPoint xyStep = myPixelManager.GetDeltaMathsCoord(pixelStep);
 
                 // Start stopwatch - used to measure performance improvements
-                // (from improving the efficiency of the maths implementation).
+               
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
@@ -193,7 +189,6 @@ namespace Drawing {
                         // Initialise complex value Zk.
                         ComplexPoint zk = new ComplexPoint(x, y);
                        // zk = new ComplexPoint(Math.Sin(zk.x) * Math.Cosh(zk.y), Math.Cos(zk.x) * Math.Sinh(zk.y)); 
-
                         // Create complex point C = x + i*y.
                         ComplexPoint c = new ComplexPoint(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text));
 
@@ -248,7 +243,7 @@ namespace Drawing {
                                     myBitmap.SetPixel(xPix, yPix, color);
                                 }
                             } else {
-                                // Pixel step is > 1, set a square of pixels.
+                             // Pixel step is > 1, set a square of pixels.
                                 for (int pX = 0; pX < xyPixelStep; pX++) {
                                     for (int pY = 0; pY < xyPixelStep; pY++) {
                                         if (((xPix + pX) < myBitmap.Width) && ((yPix - pY) >= 0)) {
@@ -283,13 +278,13 @@ namespace Drawing {
             }
         }
 
-        /// <summary>
+      
         /// Convert HSL colour value to Color object.
-        /// </summary>
+     
         /// <param name="H">Hue</param>
         /// <param name="S">Saturation</param>
         /// <param name="L">Lightness</param>
-        /// <returns>Color object</returns>
+     
         private static Color colorFromHSLA(double H, double S, double L) {
             double v;
             double r, g, b;
@@ -298,9 +293,8 @@ namespace Drawing {
             g = L;
             b = L;
 
-            // Standard HSL to RGB conversion. This is described in
-            // detail at:
-            // http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
+            // Standard HSL to RGB conversion.
+           
             v = (L <= 0.5) ? (L * (1.0 + S)) : (L + S - L * S);
 
             if (v > 0) {
@@ -362,12 +356,10 @@ namespace Drawing {
             return color;
         }
 
-        /// <summary>
+     
         /// On-click handler for main form. Defines the points (lower-left and upper-right)
         /// of a zoom rectangle.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+     
         private void mouseClickOnForm(object sender, MouseEventArgs e) {
             if (zoomCheckbox.Checked) {
                 Pen box = new Pen(Color.Black);
@@ -394,12 +386,10 @@ namespace Drawing {
             }
         }
 
-        /// <summary>
+     
         /// Mouse-up handler for main form. The coordinates of the rectangle are
         /// saved so the new drawing can be rendered.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+      
         private void mouseUpOnForm(object sender, MouseEventArgs e) {
             if (zoomCheckbox.Checked) {
                 double x = Convert.ToDouble(e.X);
@@ -429,12 +419,10 @@ namespace Drawing {
             }
         }
 
-        /// <summary>
+  
         /// This will apply the zoom rectangle coordinates to the
         /// yMin yMax, xMin xMax text boxes.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+      
         private void button2_Click(object sender, EventArgs e) {
             yMinCheckBox.Text = Convert.ToString(zoomCoord1.y);
             yMaxCheckBox.Text = Convert.ToString(zoomCoord2.y);
@@ -442,66 +430,18 @@ namespace Drawing {
             xMaxCheckBox.Text = Convert.ToString(zoomCoord2.x);
         }
 
-        /// <summary>
-        /// This will prompt for a favourite name, and then save the current
-        /// settings to a text file so they can be used again.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
- 
 
-        /// <summary>
-        /// This reads the selected text file, and sets the xMin xMax, yMin yMax text
-        /// boxes to the coordinates in the text file.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-      
-
-        /// <summary>
-        /// When the dropdown list is opened, it will check for empty favourite names
-        /// and delete them.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-       
-
-        /// <summary>
-        /// When the undo button is clicked, the last settings are read from
-        /// the last undo text file, and the text boxes are set to these settings.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void undo_Click(object sender, EventArgs e) {
-            try {
-                var fileContent = File.ReadAllText(@"C:\Users\" + userName + "\\mandelbrot_config\\Undo\\undo" + (undoNum -= 1) + ".txt");
-                var array1 = fileContent.Split((string[])null, StringSplitOptions.RemoveEmptyEntries);
-
-                pixelStepTextBox.Text = array1[0];
-                iterationCountTextBox.Text = array1[1];
-                yMinCheckBox.Text = array1[2];
-                yMaxCheckBox.Text = array1[3];
-                xMinCheckBox.Text = array1[4];
-                xMaxCheckBox.Text = array1[5];
-            } catch (Exception e3) {
-                MessageBox.Show("Unable to Undo: " + e3.Message, "Error");
-            }
-        }
-
-        /// <summary>
         /// Class used for colour lookup table.
-        /// </summary>
+   
         private class ColourTable {
             public int kMax;
             public int nColour;
             private double scale;
             private Color[] colourTable;
 
-            /// <summary>
+          
             /// Constructor. Creates lookup table.
-            /// </summary>
-            /// <param name="n"></param>
-            /// <param name="kMax"></param>
+            
             public ColourTable(int n, int kMax) {
                 nColour = n;
                 this.kMax = kMax;
@@ -515,11 +455,9 @@ namespace Drawing {
                 }
             }
 
-            /// <summary>
+        
             /// Retrieve the colour from iteration count k.
-            /// </summary>
-            /// <param name="k"></param>
-            /// <returns></returns>
+            
             public Color GetColour(int k) {
                 return colourTable[k];
             } 
