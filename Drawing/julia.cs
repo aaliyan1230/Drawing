@@ -16,17 +16,15 @@ using System.Drawing.Drawing2D;
 
 
 namespace Drawing {
-    /// <summary>
+  
     /// Mandelbrot class extends Form, used to render the Mandelbrot set,
     /// with user controls allowing selection of the region to plot,
     /// resolution, maximum iteration count etc.
-    /// </summary>
+
     
     public partial class julia : Form {
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
+     
         public julia() {
             InitializeComponent();
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
@@ -79,9 +77,7 @@ namespace Drawing {
         /// Load the main form for this application.
        
         private void Form1_Load(object sender, EventArgs e) {
-            // Get current user name. Used to manage their favourites (file storage),
-            // and also undo-history storage.
-            userName = Environment.UserName;
+            
 
             // Create graphics object for Mandelbrot rendering.
             myBitmap = new Bitmap(ClientRectangle.Width,
@@ -136,7 +132,7 @@ namespace Drawing {
                     undoNum++;
                 }
 
-                // Mandelbrot iteration count.
+                // Mandelbrot iteration count, meaning number of colours.
                 kMax = Convert.ToInt32(iterationCountTextBox.Text);
                 numColours = kMax;
 
@@ -196,6 +192,7 @@ namespace Drawing {
                     for (double x = xMin; x < xMax; x += xyStep.x) {
                         // Initialise complex value Zk.
                         ComplexPoint zk = new ComplexPoint(x, y);
+                       // zk = new ComplexPoint(Math.Sin(zk.x) * Math.Cosh(zk.y), Math.Cos(zk.x) * Math.Sinh(zk.y)); 
 
                         // Create complex point C = x + i*y.
                         ComplexPoint c = new ComplexPoint(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text));
