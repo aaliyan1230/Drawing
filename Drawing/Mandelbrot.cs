@@ -250,10 +250,10 @@ namespace Drawing {
                     int xPix = 0;
                     for (double x = xMin; x < xMax; x += xyStep.x) {
                         // Create complex point C = x + i*y.
-                        ComplexPoint zk = new ComplexPoint(0, 0);
+                        ComplexPoint c = new ComplexPoint(x, y);
 
                         // Initialise complex value Zk.
-                        ComplexPoint c = new ComplexPoint(x, y);
+                        ComplexPoint zk = new ComplexPoint(0.0, 0.0);
 
                         // Do the main Mandelbrot calculation. Iterate until the equation
                         // converges or the maximum number of iterations is reached.
@@ -330,7 +330,11 @@ namespace Drawing {
                 stopwatchLabel.Text = Convert.ToString(sw.Elapsed.TotalSeconds);
                 statusLabel.Text = "Status: Render complete";
 
-               
+                StreamWriter writer = new StreamWriter(@"C:\Users\" + userName + "\\mandelbrot_config\\Undo\\undo" + undoNum + ".txt");
+                writer.Write(pixelStepTextBox.Text + Environment.NewLine + iterationCountTextBox.Text + Environment.NewLine + yMinCheckBox.Text + Environment.NewLine + yMaxCheckBox.Text + Environment.NewLine + xMinCheckBox.Text + Environment.NewLine + xMaxCheckBox.Text);
+                writer.Close();
+                writer.Dispose();
+
             } catch (Exception e2) {
                 MessageBox.Show("Exception Trapped: " + e2.Message, "Error");
                 statusLabel.Text = "Status: Error";
