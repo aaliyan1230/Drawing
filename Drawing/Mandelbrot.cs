@@ -72,8 +72,8 @@ namespace Drawing {
         private string userName;                                    // User name.
         private ColourTable colourTable = null;                     // Colour table.
 
-        OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\Mandelbrot.accdb");
-        OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\Mandelbrot.accdb");
+        OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Mandelbrot.accdb");
+        OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Mandelbrot.accdb");
         DataSet d1 = new DataSet();
 
 
@@ -108,7 +108,7 @@ namespace Drawing {
             count++;
 
 
-            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "' )", con);
+            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','"+ iterationCountTextBox.Text +  "' )", con);
             com.ExecuteNonQuery();
             MessageBox.Show("Points have been saved");
 
@@ -135,6 +135,7 @@ namespace Drawing {
                 yMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["yMax"].FormattedValue.ToString();
                 xMinCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMin"].FormattedValue.ToString();
                 xMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMax"].FormattedValue.ToString();
+                iterationCountTextBox.Text = dataGridView1.Rows[e.RowIndex].Cells["iterations"].FormattedValue.ToString();
             }
             dataGridView1.Hide();
             /*
@@ -536,11 +537,6 @@ namespace Drawing {
             private double scale;
             private Color[] colourTable;
 
-            /// <summary>
-            /// Constructor. Creates lookup table.
-            /// </summary>
-            /// <param name="n"></param>
-            /// <param name="kMax"></param>
             public ColourTable(int n, int kMax) {
                 nColour = n;
                 this.kMax = kMax;

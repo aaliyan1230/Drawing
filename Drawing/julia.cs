@@ -74,8 +74,8 @@ namespace Drawing {
         private ColourTable colourTable = null;                     // Colour table.
 
 
-        OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\Mandelbrot.accdb");
-        OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\Mandelbrot.accdb");
+        OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Julia.accdb");
+        OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Mandelbrot.accdb");
         DataSet d1 = new DataSet();
         /// Load the main form for this application.
 
@@ -106,7 +106,7 @@ namespace Drawing {
             count++;
 
 
-            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "' )", con);
+            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','" + iterationCountTextBox.Text + "' )", con);
             com.ExecuteNonQuery();
             MessageBox.Show("Points have been saved");
 
@@ -132,6 +132,7 @@ namespace Drawing {
                 yMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["yMax"].FormattedValue.ToString();
                 xMinCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMin"].FormattedValue.ToString();
                 xMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMax"].FormattedValue.ToString();
+                iterationCountTextBox.Text = dataGridView1.Rows[e.RowIndex].Cells["iterations"].FormattedValue.ToString();
             }
             dataGridView1.Hide();
           
@@ -458,25 +459,8 @@ namespace Drawing {
                 RenderImage();
             }
         }
-        private void undo_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var fileContent = File.ReadAllText(@"C:\Users\" + userName + "\\mandelbrot_config\\Undo\\undo" + (undoNum -= 1) + ".txt");
-                var array1 = fileContent.Split((string[])null, StringSplitOptions.RemoveEmptyEntries);
-
-                pixelStepTextBox.Text = array1[0];
-                iterationCountTextBox.Text = array1[1];
-                yMinCheckBox.Text = array1[2];
-                yMaxCheckBox.Text = array1[3];
-                xMinCheckBox.Text = array1[4];
-                xMaxCheckBox.Text = array1[5];
-            }
-            catch (Exception e3)
-            {
-                MessageBox.Show("Unable to Undo: " + e3.Message, "Error");
-            }
-        }
+       
+        
         private void undo_Click(object sender, EventArgs e)
         {
             try
