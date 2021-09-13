@@ -73,12 +73,16 @@ namespace Drawing {
         private string userName;                                    // User name.
         private ColourTable colourTable = null;                     // Colour table.
 
-        
-        /// Load the main form for this application.
-       
-        private void Form1_Load(object sender, EventArgs e) {
-            
 
+        OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\Mandelbrot.accdb");
+        OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\Mandelbrot.accdb");
+        DataSet d1 = new DataSet();
+        /// Load the main form for this application.
+
+        private void Form1_Load(object sender, EventArgs e) {
+            con.Open();
+            dataGridView1.Hide();
+       
             // Create graphics object for Mandelbrot rendering.
             myBitmap = new Bitmap(ClientRectangle.Width,
                                   ClientRectangle.Height,
@@ -95,11 +99,47 @@ namespace Drawing {
            
         }
 
-     
+        int count = 0;
+
+        private void dbb_Click(object sender, EventArgs e)
+        {
+            count++;
+
+
+            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "' )", con);
+            com.ExecuteNonQuery();
+            MessageBox.Show("Points have been saved");
+
+        }
+
+        private void rdb_Click(object sender, EventArgs e)
+        {
+
+            DataTable d = new DataTable();
+
+            adap.Fill(d);
+            dataGridView1.DataSource = d;
+            dataGridView1.Show();
+          
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+            {
+                dataGridView1.CurrentRow.Selected = true;
+                yMinCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["yMin"].FormattedValue.ToString();
+                yMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["yMax"].FormattedValue.ToString();
+                xMinCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMin"].FormattedValue.ToString();
+                xMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMax"].FormattedValue.ToString();
+            }
+            dataGridView1.Hide();
+          
+        }
         /// On-click handler for generate button. Triggers rendering of the Mandelbrot
         /// set using current configuration settings.
-      
-       
+
+
         private void generate_Click(object sender, EventArgs e) {
             RenderImage();
         }

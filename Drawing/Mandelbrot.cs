@@ -9,7 +9,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
-
+using System.Data.OleDb;
 
 
 namespace Drawing {
@@ -72,13 +72,21 @@ namespace Drawing {
         private string userName;                                    // User name.
         private ColourTable colourTable = null;                     // Colour table.
 
-        
+        OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\Mandelbrot.accdb");
+        OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\Mandelbrot.accdb");
+        DataSet d1 = new DataSet();
+
+
         /// Load the main form for this application.
-       
+
         private void Form1_Load(object sender, EventArgs e) {
+            con.Open();
+            dataGridView1.Hide();
             // Get current user name. Used to manage their favourites (file storage),
             // and also undo-history storage.
             userName = Environment.UserName;
+           
+
 
             // Create graphics object for Mandelbrot rendering.
             myBitmap = new Bitmap(ClientRectangle.Width,
@@ -90,17 +98,67 @@ namespace Drawing {
 
             // Hide controls that are not relevant until the first rendering has completed.
             zoomCheckbox.Hide();
-            undoButton.Hide();
-
-           
-           
+            undoButton.Hide();   
         }
 
-     
+        int count = 0;
+
+        private void dbb_Click(object sender, EventArgs e)
+        {
+            count++;
+
+
+            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "' )", con);
+            com.ExecuteNonQuery();
+            MessageBox.Show("Points have been saved");
+
+        }
+
+        private void rdb_Click(object sender, EventArgs e)
+        {
+
+            DataTable d = new DataTable();
+
+            adap.Fill(d/*,"DataPts"*/);
+            dataGridView1.DataSource = d;
+            dataGridView1.Show();
+            /*       adap.Fill(d1*//*, "DataPts"*//*);
+                   dataGrid1.DataSource = d1.Tables[0];*/
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+            {
+                dataGridView1.CurrentRow.Selected = true;
+                yMinCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["yMin"].FormattedValue.ToString();
+                yMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["yMax"].FormattedValue.ToString();
+                xMinCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMin"].FormattedValue.ToString();
+                xMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMax"].FormattedValue.ToString();
+            }
+            dataGridView1.Hide();
+            /*
+                       int ss = e.RowIndex ;
+                        OleDbCommand com = new OleDbCommand("select * from DataPts where [Num] =  "+count+"", con);
+                        OleDbDataReader d2 = com.ExecuteReader();
+                        while (d2.Read())
+                        {
+                            yMinCheckBox.Text = (d2["yMin"].ToString());
+                            yMaxCheckBox.Text = (d2["yMax"].ToString());
+                            xMinCheckBox.Text = (d2["xMin"].ToString());
+                            xMaxCheckBox.Text = (d2["xMax"].ToString());
+                        }*/
+        }
+
+
+
+
+
+
         /// On-click handler for generate button. Triggers rendering of the Mandelbrot
         /// set using current configuration settings.
-      
-       
+
+
         private void generate_Click(object sender, EventArgs e) {
             RenderImage();
         }
@@ -192,10 +250,10 @@ namespace Drawing {
                     int xPix = 0;
                     for (double x = xMin; x < xMax; x += xyStep.x) {
                         // Create complex point C = x + i*y.
-                        ComplexPoint zk = new ComplexPoint(x, y);
+                        ComplexPoint zk = new ComplexPoint(0, 0);
 
                         // Initialise complex value Zk.
-                        ComplexPoint c = new ComplexPoint(-0.7, 0.27015);
+                        ComplexPoint c = new ComplexPoint(x, y);
 
                         // Do the main Mandelbrot calculation. Iterate until the equation
                         // converges or the maximum number of iterations is reached.
