@@ -105,7 +105,31 @@ namespace Drawing {
 
         private void dbb_Click(object sender, EventArgs e)
         {
-            count++;
+            string connetionString = null;
+            OleDbConnection connection;
+            OleDbDataAdapter oledbAdapter;
+            DataSet ds = new DataSet();
+            string sql = null;
+
+            connetionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = D:\c#\Mandelbrot\Drawing\Mandelbrot.accdb";
+            sql = "select * from DataPts";
+
+            connection = new OleDbConnection(connetionString);
+            try
+            {
+                connection.Open();
+                oledbAdapter = new OleDbDataAdapter(sql, con);
+                oledbAdapter.Fill(ds, "DataPts");
+                oledbAdapter.Dispose();
+                connection.Close();
+                count = ds.Tables[0].Rows.Count + 1;
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Can not open connection ! ");
+            }
 
 
             OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','"+ iterationCountTextBox.Text +  "' )", con);
@@ -593,6 +617,11 @@ namespace Drawing {
         }
 
         private void statusLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }

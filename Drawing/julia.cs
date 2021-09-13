@@ -17,12 +17,13 @@ using System.Data.OleDb;
 
 namespace Drawing {
   
-    /// Mandelbrot class extends Form, used to render the Mandelbrot set,
+    /// Julia class extends Form, used to render the Julia set,
     /// with user controls allowing selection of the region to plot,
     /// resolution, maximum iteration count etc.
 
     
-    public partial class julia : Form {
+    public partial class julia : Form
+    {
 
      
         public julia() {
@@ -75,16 +76,16 @@ namespace Drawing {
 
 
         OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Julia.accdb");
-        OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Mandelbrot.accdb");
+        OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Julia.accdb");
         DataSet d1 = new DataSet();
         /// Load the main form for this application.
 
         private void Form1_Load(object sender, EventArgs e) {
             con.Open();
             dataGridView1.Hide();
-       
+            userName = Environment.UserName;
             // Create graphics object for Mandelbrot rendering.
-            myBitmap = new Bitmap(ClientRectangle.Width,
+                        myBitmap = new Bitmap(ClientRectangle.Width,
                                   ClientRectangle.Height,
                                   System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             g = Graphics.FromImage(myBitmap);
@@ -94,19 +95,40 @@ namespace Drawing {
             // Hide controls that are not relevant until the first rendering has completed.
             zoomCheckbox.Hide();
             undoButton.Hide();
-
-           
-           
         }
 
         int count = 0;
 
         private void dbb_Click(object sender, EventArgs e)
         {
-            count++;
+            string connetionString = null;
+            OleDbConnection connection;
+            OleDbDataAdapter oledbAdapter;
+            DataSet ds = new DataSet();
+            string sql = null;
+
+            connetionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = D:\c#\Mandelbrot\Drawing\Julia.accdb";
+            sql = "select * from DataPts";
+
+            connection = new OleDbConnection(connetionString);
+            try
+            {
+                connection.Open();
+                oledbAdapter = new OleDbDataAdapter(sql, con);
+                oledbAdapter.Fill(ds, "DataPts");
+                oledbAdapter.Dispose();
+                connection.Close();
+                count = ds.Tables[0].Rows.Count + 1;
+
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Can not open connection ! ");
+            }
 
 
-            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','" + iterationCountTextBox.Text + "' )", con);
+            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations, Cx, Cy) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','" + iterationCountTextBox.Text  + "','" + textBox1.Text + "','" + textBox2.Text + "' )", con);
             com.ExecuteNonQuery();
             MessageBox.Show("Points have been saved");
 
@@ -133,6 +155,9 @@ namespace Drawing {
                 xMinCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMin"].FormattedValue.ToString();
                 xMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMax"].FormattedValue.ToString();
                 iterationCountTextBox.Text = dataGridView1.Rows[e.RowIndex].Cells["iterations"].FormattedValue.ToString();
+                textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells["Cx"].FormattedValue.ToString();
+                textBox2.Text = dataGridView1.Rows[e.RowIndex].Cells["Cy"].FormattedValue.ToString();
+
             }
             dataGridView1.Hide();
           
@@ -565,6 +590,11 @@ namespace Drawing {
         }
 
         private void iterationCountTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }

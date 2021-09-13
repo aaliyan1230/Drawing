@@ -7,13 +7,8 @@ using System.Drawing;
 
 namespace Drawing {
 
-    /// <summary>
     /// ScreenPixelManage class. Handles the conversions between mathematical
-    /// units and physical screen coordinates, i.e. pixel coordinates. The
-    /// underlying mathematical coordinates are independent of screen resolution
-    /// and size, whereas pixel coordinates are applicable to run-time screen
-    /// dimensions.
-    /// </summary>
+    /// units and physical screen coordinates, i.e. pixel coordinates.
     public class ScreenPixelManage {
         public int xPixel;
         public int yPixel;
@@ -22,29 +17,19 @@ namespace Drawing {
         private double convConstY1;
         private double convConstY2;
 
-        /// <summary>
+      
         /// Simple class used to define a pixel's coordinates.
-        /// </summary>
+      
         public class PixelCoord {
             public int xPixel;
             public int yPixel;
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="graphics"></param>
-        /// <param name="screenBottomLeftCorner"></param>
-        /// <param name="screenTopRightCorner"></param>
+        
         public ScreenPixelManage(Graphics graphics, ComplexPoint screenBottomLeftCorner, ComplexPoint screenTopRightCorner) {
             
             // Transform from mathematical to pixel coordinates.
-            //
-            // The following are long-handed calulations, now replaced with more efficient calculations
-            // using convConst** values.
-            //       this.xPixel = (int) ((graphics.VisibleClipBounds.Size.Width) / (screenTopRightCorner.x - screenBottomLeftCorner.x) * (cmplxPoint.x - screenBottomLeftCorner.x));
-            //       this.yPixel = (int) (graphics.VisibleClipBounds.Size.Height - graphics.VisibleClipBounds.Size.Height / (screenTopRightCorner.y - screenBottomLeftCorner.y) * (cmplxPoint.y - screenBottomLeftCorner.y));
-
+          
             convConstX1 = graphics.VisibleClipBounds.Size.Width / (screenTopRightCorner.x - screenBottomLeftCorner.x);
             convConstX2 = convConstX1 * screenBottomLeftCorner.x;
 
@@ -52,12 +37,9 @@ namespace Drawing {
             convConstY2 = graphics.VisibleClipBounds.Size.Height / (screenTopRightCorner.y - screenBottomLeftCorner.y);
         }
 
-        /// <summary>
+     
         /// Convert from maths coordinates to pixel coordinates.
-        /// </summary>
-        /// <param name="cmplxPoint">Complex number (mathematical coordiantes)</param>
-        /// <returns>Pixel coordinate, also a complex number but represented
-        /// as an X,Y screen coordinate</returns>
+        
         public PixelCoord GetPixelCoord(ComplexPoint cmplxPoint) {
             PixelCoord result = new PixelCoord();
             result.xPixel = (int) (convConstX1 * cmplxPoint.x - convConstX2);
@@ -97,13 +79,11 @@ namespace Drawing {
             return result;
         }
 
-        /// <summary>
+       
         /// Get absolute maths coordinate from pixel coordinate. This is effectively
         /// an inverse calcuate: given a pixel screen coordinate it returns the
         /// corresponding mathematical point.
-        /// </summary>
-        /// <param name="pixelCoord">Screen coordinate</param>
-        /// <returns>Mathematical point corresponding to pixelCoord</returns>
+       
         public ComplexPoint GetAbsoluteMathsCoord(ComplexPoint pixelCoord) {
             ComplexPoint result = new ComplexPoint(
                    (convConstX2 + pixelCoord.x) / convConstX1,

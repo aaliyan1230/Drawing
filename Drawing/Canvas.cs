@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace Drawing {
+namespace Drawinggghjhj {
     class Canvas : Panel {
 
         static Canvas myCanvas = new Canvas();
