@@ -1,6 +1,6 @@
 Introduction:
 
-One of the most stunning and well-known mathematical images of all time is the Mandelbrot set, named after mathematician Benoit Mandelbrot, who contributed greatly to its study. An image of the Mandelbrot set is shown below:
+One of the most stunning and well-known mathematical images of all time is the Mandelbrot set, named after mathematician Benoit Mandelbrot, who contributed greatly to its study. 
  
 Mandelbrot set:
 
