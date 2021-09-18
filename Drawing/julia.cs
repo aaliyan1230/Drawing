@@ -558,8 +558,7 @@ namespace Drawing {
         // Button used to save bitmap at desired location. File type is defaulted as Portable Network Graphics.
         private void saveImageButton_Click(object sender, EventArgs e) {
             //myBitmap.Save(@"C:\Users\" + userName + "\\mandelbrot_config\\Images\\" + saveImageTextBox.Text + ".png");
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "\\fileName.txt");
-            myBitmap.Save(@"D:\\c#\\Mandelbrot\\images\\" + saveImageTextBox.Text + ".png");
+            myBitmap.Save(@"D:\\c#\\Mandelbrot\Drawing\\images\\" + saveImageTextBox.Text + ".png");
             MessageBox.Show("image saved!");
             saveImageTextBox.Clear();
             
