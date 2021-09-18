@@ -17,8 +17,8 @@ namespace Drawing {
     /// Mandelbrot class extends Form, used to render the Mandelbrot set,
     /// with user controls allowing selection of the region to plot,
     /// resolution, maximum iteration count etc.
-  
     
+
     public partial class Mandelbrot : Form {
 
         /// <summary>
@@ -72,15 +72,15 @@ namespace Drawing {
         private string userName;                                    // User name.
         private ColourTable colourTable = null;                     // Colour table.
 
-        OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Mandelbrot.accdb");
-        OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Mandelbrot.accdb");
+        //OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Mandelbrot.accdb");
+        //OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Mandelbrot.accdb");
         DataSet d1 = new DataSet();
 
 
         /// Load the main form for this application.
 
         private void Form1_Load(object sender, EventArgs e) {
-            con.Open();
+           // con.Open();
             dataGridView1.Hide();
             // Get current user name. Used to manage their favourites (file storage),
             // and also undo-history storage.
@@ -110,15 +110,18 @@ namespace Drawing {
             OleDbDataAdapter oledbAdapter;
             DataSet ds = new DataSet();
             string sql = null;
+            string replacement = @"\Drawing\bin\Release";
+            string path = Path.Combine(Directory.GetCurrentDirectory());
+            path = path.Replace(replacement, "");
 
-            connetionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = D:\c#\Mandelbrot\Drawing\Mandelbrot.accdb";
+            connetionString = $@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = {path}\Mandelbrot.accdb";
             sql = "select * from DataPts";
 
             connection = new OleDbConnection(connetionString);
             try
             {
                 connection.Open();
-                oledbAdapter = new OleDbDataAdapter(sql, con);
+                oledbAdapter = new OleDbDataAdapter(sql, connection);
                 oledbAdapter.Fill(ds, "DataPts");
                 oledbAdapter.Dispose();
                 connection.Close();
@@ -132,7 +135,7 @@ namespace Drawing {
             }
 
 
-            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','"+ iterationCountTextBox.Text +  "' )", con);
+            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','"+ iterationCountTextBox.Text +  "' )", connection);
             com.ExecuteNonQuery();
             MessageBox.Show("Points have been saved");
 
@@ -140,9 +143,16 @@ namespace Drawing {
 
         private void rdb_Click(object sender, EventArgs e)
         {
-
+           
             DataTable d = new DataTable();
-
+            string replacement = @"\Drawing\bin\Release";
+            string path = Path.Combine(Directory.GetCurrentDirectory());
+            path = path.Replace(replacement, "");
+            string connectionString = $@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = {path}\Mandelbrot.accdb";
+            string sql = "select * from DataPts";
+            OleDbConnection connection = new OleDbConnection(connectionString);
+            connection.Open();
+            OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", $@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source={path}\Mandelbrot.accdb");
             adap.Fill(d/*,"DataPts"*/);
             dataGridView1.DataSource = d;
             dataGridView1.Show();
@@ -590,9 +600,13 @@ namespace Drawing {
         }
 
         // Button used to save bitmap at desired location. File type is defaulted as Portable Network Graphics.
-        private void saveImageButton_Click(object sender, EventArgs e) {
+        private void saveImageButton_Click(object sender, EventArgs e)
+        {
             //myBitmap.Save(@"C:\Users\" + userName + "\\mandelbrot_config\\Images\\" + saveImageTextBox.Text + ".png");
-            myBitmap.Save(@"D:\\c#\\Mandelbrot\\Drawing\\images\\" + saveImageTextBox.Text + ".png");
+            string replacement = @"\Drawing\bin\Release";
+            string path = Path.Combine(Directory.GetCurrentDirectory());
+            path = path.Replace(replacement, "");
+            myBitmap.Save($@"{path}\\images\\" + saveImageTextBox.Text + ".png");
             MessageBox.Show("image saved!");
         }
 

@@ -75,13 +75,13 @@ namespace Drawing {
         private ColourTable colourTable = null;                     // Colour table.
 
 
-        OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Julia.accdb");
-        OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Julia.accdb");
+       // OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Julia.accdb");
+        //OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Julia.accdb");
         DataSet d1 = new DataSet();
         /// Load the main form for this application.
 
         private void Form1_Load(object sender, EventArgs e) {
-            con.Open();
+           // con.Open();
             dataGridView1.Hide();
             userName = Environment.UserName;
             // Create graphics object for Mandelbrot rendering.
@@ -106,15 +106,18 @@ namespace Drawing {
             OleDbDataAdapter oledbAdapter;
             DataSet ds = new DataSet();
             string sql = null;
+            string replacement = @"\Drawing\bin\Release";
+            string path = Path.Combine(Directory.GetCurrentDirectory());
+            path = path.Replace(replacement, "");
 
-            connetionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = D:\c#\Mandelbrot\Drawing\Julia.accdb";
+            connetionString = $@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = {path}\Julia.accdb";
             sql = "select * from DataPts";
 
             connection = new OleDbConnection(connetionString);
             try
             {
                 connection.Open();
-                oledbAdapter = new OleDbDataAdapter(sql, con);
+                oledbAdapter = new OleDbDataAdapter(sql, connection);
                 oledbAdapter.Fill(ds, "DataPts");
                 oledbAdapter.Dispose();
                 connection.Close();
@@ -128,7 +131,7 @@ namespace Drawing {
             }
 
 
-            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations, Cx, Cy) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','" + iterationCountTextBox.Text  + "','" + textBox1.Text + "','" + textBox2.Text + "' )", con);
+            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations, Cx, Cy) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','" + iterationCountTextBox.Text  + "','" + textBox1.Text + "','" + textBox2.Text + "' )", connection);
             com.ExecuteNonQuery();
             MessageBox.Show("Points have been saved");
 
@@ -138,7 +141,10 @@ namespace Drawing {
         {
 
             DataTable d = new DataTable();
-
+            string replacement = @"\Drawing\bin\Release";
+            string path = Path.Combine(Directory.GetCurrentDirectory());
+            path = path.Replace(replacement, "");
+            OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", $@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source={path}\Julia.accdb");
             adap.Fill(d);
             dataGridView1.DataSource = d;
             dataGridView1.Show();
@@ -558,10 +564,12 @@ namespace Drawing {
         // Button used to save bitmap at desired location. File type is defaulted as Portable Network Graphics.
         private void saveImageButton_Click(object sender, EventArgs e) {
             //myBitmap.Save(@"C:\Users\" + userName + "\\mandelbrot_config\\Images\\" + saveImageTextBox.Text + ".png");
-            myBitmap.Save(@"D:\\c#\\Mandelbrot\Drawing\\images\\" + saveImageTextBox.Text + ".png");
+            string replacement = @"\Drawing\bin\Release";
+            string path = Path.Combine(Directory.GetCurrentDirectory());
+            path = path.Replace(replacement, "");
+            myBitmap.Save($@"{path}\\images\\" + saveImageTextBox.Text + ".png");
             MessageBox.Show("image saved!");
-            saveImageTextBox.Clear();
-            
+
         }
 
         // About label that shows information about author and program when clicked.
