@@ -69,9 +69,7 @@ namespace Drawing {
         /// This implementation uses pre-calculated constant scale factors
         /// for an efficient implementation.
         /// 
-        /// </summary>
-        /// <param name="pixelCoord">Screen coordinate</param>
-        /// <returns></returns>
+
         public ComplexPoint GetDeltaMathsCoord(ComplexPoint pixelCoord) {
             ComplexPoint result = new ComplexPoint(
                    pixelCoord.x / convConstX1,

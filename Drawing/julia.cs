@@ -258,7 +258,7 @@ namespace Drawing {
                         // Create complex point C = x + i*y.
                         ComplexPoint c = new ComplexPoint(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text));
 
-                        // Do the main Mandelbrot calculation. Iterate until the equation
+                        // Do the main Julia calculation. Iterate until the equation
                         // converges or the maximum number of iterations is reached.
                         int k = 0;
                         do {
@@ -558,6 +558,7 @@ namespace Drawing {
         // Button used to save bitmap at desired location. File type is defaulted as Portable Network Graphics.
         private void saveImageButton_Click(object sender, EventArgs e) {
             //myBitmap.Save(@"C:\Users\" + userName + "\\mandelbrot_config\\Images\\" + saveImageTextBox.Text + ".png");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "\\fileName.txt");
             myBitmap.Save(@"D:\\c#\\Mandelbrot\\images\\" + saveImageTextBox.Text + ".png");
             MessageBox.Show("image saved!");
             saveImageTextBox.Clear();
