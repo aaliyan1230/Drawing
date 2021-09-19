@@ -22,7 +22,7 @@ The colours are assigned to pixels in the application based on the complexity of
 
 Instructions:
 
-The application is ready to use, just change the path of the database and path of saving the image according to your own personal drive where the repository is cloned.
+The application is ready to use.
 zoom in and out to see the patterns, save the desired patterns as images or coordinates for future exploration. 
 increasing the number of iterations gives a clearer image.
 
