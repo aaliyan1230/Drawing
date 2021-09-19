@@ -130,7 +130,7 @@ namespace Drawing {
                 MessageBox.Show("Can not open connection ! ");
             }
 
-
+            connection.Open();
             OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations, Cx, Cy) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','" + iterationCountTextBox.Text  + "','" + textBox1.Text + "','" + textBox2.Text + "' )", connection);
             com.ExecuteNonQuery();
             MessageBox.Show("Points have been saved");

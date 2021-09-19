@@ -105,19 +105,17 @@ namespace Drawing {
 
         private void dbb_Click(object sender, EventArgs e)
         {
-            string connetionString = null;
-            OleDbConnection connection;
+            //string connetionString = null;
+            //OleDbConnection connection;
             OleDbDataAdapter oledbAdapter;
             DataSet ds = new DataSet();
-            string sql = null;
             string replacement = @"\Drawing\bin\Release";
             string path = Path.Combine(Directory.GetCurrentDirectory());
             path = path.Replace(replacement, "");
-
-            connetionString = $@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = {path}\Mandelbrot.accdb";
-            sql = "select * from DataPts";
-
-            connection = new OleDbConnection(connetionString);
+            string connectionString = $@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = {path}\Mandelbrot.accdb";
+            string sql = "select * from DataPts";
+            OleDbConnection connection = new OleDbConnection(connectionString);
+            //connection.Open();
             try
             {
                 connection.Open();
@@ -134,11 +132,11 @@ namespace Drawing {
                 MessageBox.Show("Can not open connection ! ");
             }
 
-
+            connection.Open();
             OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','"+ iterationCountTextBox.Text +  "' )", connection);
             com.ExecuteNonQuery();
             MessageBox.Show("Points have been saved");
-
+            connection.Close();
         }
 
         private void rdb_Click(object sender, EventArgs e)
