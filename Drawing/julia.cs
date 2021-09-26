@@ -9,24 +9,23 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
-
+using System.Data.OleDb;
 
 
 
 
 
 namespace Drawing {
-    /// <summary>
-    /// Mandelbrot class extends Form, used to render the Mandelbrot set,
+  
+    /// Julia class extends Form, used to render the Julia set,
     /// with user controls allowing selection of the region to plot,
     /// resolution, maximum iteration count etc.
-    /// </summary>
-    
-    public partial class julia : Form {
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
+    
+    public partial class julia : Form
+    {
+
+     
         public julia() {
             InitializeComponent();
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
@@ -75,16 +74,18 @@ namespace Drawing {
         private string userName;                                    // User name.
         private ColourTable colourTable = null;                     // Colour table.
 
-        
-        /// Load the main form for this application.
-       
-        private void Form1_Load(object sender, EventArgs e) {
-            // Get current user name. Used to manage their favourites (file storage),
-            // and also undo-history storage.
-            userName = Environment.UserName;
 
+       // OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Julia.accdb");
+        //OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Julia.accdb");
+        DataSet d1 = new DataSet();
+        /// Load the main form for this application.
+
+        private void Form1_Load(object sender, EventArgs e) {
+           // con.Open();
+            dataGridView1.Hide();
+            userName = Environment.UserName;
             // Create graphics object for Mandelbrot rendering.
-            myBitmap = new Bitmap(ClientRectangle.Width,
+                        myBitmap = new Bitmap(ClientRectangle.Width,
                                   ClientRectangle.Height,
                                   System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             g = Graphics.FromImage(myBitmap);
@@ -94,16 +95,83 @@ namespace Drawing {
             // Hide controls that are not relevant until the first rendering has completed.
             zoomCheckbox.Hide();
             undoButton.Hide();
-
-           
-           
         }
 
-     
+        int count = 0;
+
+        private void dbb_Click(object sender, EventArgs e)
+        {
+            string connetionString = null;
+            OleDbConnection connection;
+            OleDbDataAdapter oledbAdapter;
+            DataSet ds = new DataSet();
+            string sql = null;
+            string replacement = @"\Drawing\bin\Release";
+            string path = Path.Combine(Directory.GetCurrentDirectory());
+            path = path.Replace(replacement, "");
+
+            connetionString = $@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = {path}\Julia.accdb";
+            sql = "select * from DataPts";
+
+            connection = new OleDbConnection(connetionString);
+            try
+            {
+                connection.Open();
+                oledbAdapter = new OleDbDataAdapter(sql, connection);
+                oledbAdapter.Fill(ds, "DataPts");
+                oledbAdapter.Dispose();
+                connection.Close();
+                count = ds.Tables[0].Rows.Count + 1;
+
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Can not open connection ! ");
+            }
+
+            connection.Open();
+            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations, Cx, Cy) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','" + iterationCountTextBox.Text  + "','" + textBox1.Text + "','" + textBox2.Text + "' )", connection);
+            com.ExecuteNonQuery();
+            MessageBox.Show("Points have been saved");
+
+        }
+
+        private void rdb_Click(object sender, EventArgs e)
+        {
+
+            DataTable d = new DataTable();
+            string replacement = @"\Drawing\bin\Release";
+            string path = Path.Combine(Directory.GetCurrentDirectory());
+            path = path.Replace(replacement, "");
+            OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", $@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source={path}\Julia.accdb");
+            adap.Fill(d);
+            dataGridView1.DataSource = d;
+            dataGridView1.Show();
+          
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+            {
+                dataGridView1.CurrentRow.Selected = true;
+                yMinCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["yMin"].FormattedValue.ToString();
+                yMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["yMax"].FormattedValue.ToString();
+                xMinCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMin"].FormattedValue.ToString();
+                xMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMax"].FormattedValue.ToString();
+                iterationCountTextBox.Text = dataGridView1.Rows[e.RowIndex].Cells["iterations"].FormattedValue.ToString();
+                textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells["Cx"].FormattedValue.ToString();
+                textBox2.Text = dataGridView1.Rows[e.RowIndex].Cells["Cy"].FormattedValue.ToString();
+
+            }
+            dataGridView1.Hide();
+          
+        }
         /// On-click handler for generate button. Triggers rendering of the Mandelbrot
         /// set using current configuration settings.
-      
-       
+
+
         private void generate_Click(object sender, EventArgs e) {
             RenderImage();
         }
@@ -136,7 +204,7 @@ namespace Drawing {
                     undoNum++;
                 }
 
-                // Mandelbrot iteration count.
+                // Mandelbrot iteration count, meaning number of colours.
                 kMax = Convert.ToInt32(iterationCountTextBox.Text);
                 numColours = kMax;
 
@@ -173,18 +241,14 @@ namespace Drawing {
                 // converting from mathemathical to screen (pixel units) using the
                 myPixelManager = new ScreenPixelManage(g, screenBottomLeft, screenTopRight);
 
-                // The pixel step size defines the increment in screen pixels for each point
-                // at which the Mandelbrot calcualtion will be done. e.g. a Step of 5 means
-                // that the calcualtion will be done a 5-pixel increments. The X & Y increments
-                // are the same.
-                //
+               
                 // This increment is converted to mathematical coordinates.
                 int xyPixelStep = Convert.ToInt16(pixelStepTextBox.Text);
                 ComplexPoint pixelStep = new ComplexPoint(xyPixelStep, xyPixelStep);
                 ComplexPoint xyStep = myPixelManager.GetDeltaMathsCoord(pixelStep);
 
                 // Start stopwatch - used to measure performance improvements
-                // (from improving the efficiency of the maths implementation).
+               
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
@@ -196,11 +260,11 @@ namespace Drawing {
                     for (double x = xMin; x < xMax; x += xyStep.x) {
                         // Initialise complex value Zk.
                         ComplexPoint zk = new ComplexPoint(x, y);
-
+                       // zk = new ComplexPoint(Math.Sin(zk.x) * Math.Cosh(zk.y), Math.Cos(zk.x) * Math.Sinh(zk.y)); 
                         // Create complex point C = x + i*y.
                         ComplexPoint c = new ComplexPoint(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text));
 
-                        // Do the main Mandelbrot calculation. Iterate until the equation
+                        // Do the main Julia calculation. Iterate until the equation
                         // converges or the maximum number of iterations is reached.
                         int k = 0;
                         do {
@@ -251,7 +315,7 @@ namespace Drawing {
                                     myBitmap.SetPixel(xPix, yPix, color);
                                 }
                             } else {
-                                // Pixel step is > 1, set a square of pixels.
+                             // Pixel step is > 1, set a square of pixels.
                                 for (int pX = 0; pX < xyPixelStep; pX++) {
                                     for (int pY = 0; pY < xyPixelStep; pY++) {
                                         if (((xPix + pX) < myBitmap.Width) && ((yPix - pY) >= 0)) {
@@ -286,13 +350,13 @@ namespace Drawing {
             }
         }
 
-        /// <summary>
+      
         /// Convert HSL colour value to Color object.
-        /// </summary>
+     
         /// <param name="H">Hue</param>
         /// <param name="S">Saturation</param>
         /// <param name="L">Lightness</param>
-        /// <returns>Color object</returns>
+     
         private static Color colorFromHSLA(double H, double S, double L) {
             double v;
             double r, g, b;
@@ -301,9 +365,8 @@ namespace Drawing {
             g = L;
             b = L;
 
-            // Standard HSL to RGB conversion. This is described in
-            // detail at:
-            // http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
+            // Standard HSL to RGB conversion.
+           
             v = (L <= 0.5) ? (L * (1.0 + S)) : (L + S - L * S);
 
             if (v > 0) {
@@ -365,12 +428,10 @@ namespace Drawing {
             return color;
         }
 
-        /// <summary>
+      
         /// On-click handler for main form. Defines the points (lower-left and upper-right)
         /// of a zoom rectangle.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+     
         private void mouseClickOnForm(object sender, MouseEventArgs e) {
             if (zoomCheckbox.Checked) {
                 Pen box = new Pen(Color.Black);
@@ -397,12 +458,10 @@ namespace Drawing {
             }
         }
 
-        /// <summary>
+     
         /// Mouse-up handler for main form. The coordinates of the rectangle are
         /// saved so the new drawing can be rendered.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+      
         private void mouseUpOnForm(object sender, MouseEventArgs e) {
             if (zoomCheckbox.Checked) {
                 double x = Convert.ToDouble(e.X);
@@ -431,52 +490,12 @@ namespace Drawing {
                 RenderImage();
             }
         }
-
-        /// <summary>
-        /// This will apply the zoom rectangle coordinates to the
-        /// yMin yMax, xMin xMax text boxes.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void button2_Click(object sender, EventArgs e) {
-            yMinCheckBox.Text = Convert.ToString(zoomCoord1.y);
-            yMaxCheckBox.Text = Convert.ToString(zoomCoord2.y);
-            xMinCheckBox.Text = Convert.ToString(zoomCoord1.x);
-            xMaxCheckBox.Text = Convert.ToString(zoomCoord2.x);
-        }
-
-        /// <summary>
-        /// This will prompt for a favourite name, and then save the current
-        /// settings to a text file so they can be used again.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
- 
-
-        /// <summary>
-        /// This reads the selected text file, and sets the xMin xMax, yMin yMax text
-        /// boxes to the coordinates in the text file.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-      
-
-        /// <summary>
-        /// When the dropdown list is opened, it will check for empty favourite names
-        /// and delete them.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
        
-
-        /// <summary>
-        /// When the undo button is clicked, the last settings are read from
-        /// the last undo text file, and the text boxes are set to these settings.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void undo_Click(object sender, EventArgs e) {
-            try {
+        
+        private void undo_Click(object sender, EventArgs e)
+        {
+            try
+            {
                 var fileContent = File.ReadAllText(@"C:\Users\" + userName + "\\mandelbrot_config\\Undo\\undo" + (undoNum -= 1) + ".txt");
                 var array1 = fileContent.Split((string[])null, StringSplitOptions.RemoveEmptyEntries);
 
@@ -486,25 +505,34 @@ namespace Drawing {
                 yMaxCheckBox.Text = array1[3];
                 xMinCheckBox.Text = array1[4];
                 xMaxCheckBox.Text = array1[5];
-            } catch (Exception e3) {
+            }
+            catch (Exception e3)
+            {
                 MessageBox.Show("Unable to Undo: " + e3.Message, "Error");
             }
         }
+        /// This will apply the zoom rectangle coordinates to the
+        /// yMin yMax, xMin xMax text boxes.
 
-        /// <summary>
+        private void button2_Click(object sender, EventArgs e) {
+            yMinCheckBox.Text = Convert.ToString(zoomCoord1.y);
+            yMaxCheckBox.Text = Convert.ToString(zoomCoord2.y);
+            xMinCheckBox.Text = Convert.ToString(zoomCoord1.x);
+            xMaxCheckBox.Text = Convert.ToString(zoomCoord2.x);
+        }
+
+
         /// Class used for colour lookup table.
-        /// </summary>
+   
         private class ColourTable {
             public int kMax;
             public int nColour;
             private double scale;
             private Color[] colourTable;
 
-            /// <summary>
+          
             /// Constructor. Creates lookup table.
-            /// </summary>
-            /// <param name="n"></param>
-            /// <param name="kMax"></param>
+            
             public ColourTable(int n, int kMax) {
                 nColour = n;
                 this.kMax = kMax;
@@ -518,11 +546,9 @@ namespace Drawing {
                 }
             }
 
-            /// <summary>
+        
             /// Retrieve the colour from iteration count k.
-            /// </summary>
-            /// <param name="k"></param>
-            /// <returns></returns>
+            
             public Color GetColour(int k) {
                 return colourTable[k];
             } 
@@ -538,10 +564,12 @@ namespace Drawing {
         // Button used to save bitmap at desired location. File type is defaulted as Portable Network Graphics.
         private void saveImageButton_Click(object sender, EventArgs e) {
             //myBitmap.Save(@"C:\Users\" + userName + "\\mandelbrot_config\\Images\\" + saveImageTextBox.Text + ".png");
-            myBitmap.Save(@"D:\\c#\\Mandelbrot\\images\\" + saveImageTextBox.Text + ".png");
+            string replacement = @"\Drawing\bin\Release";
+            string path = Path.Combine(Directory.GetCurrentDirectory());
+            path = path.Replace(replacement, "");
+            myBitmap.Save($@"{path}\\images\\" + saveImageTextBox.Text + ".png");
             MessageBox.Show("image saved!");
-            saveImageTextBox.Clear();
-            
+
         }
 
         // About label that shows information about author and program when clicked.
@@ -570,6 +598,11 @@ namespace Drawing {
         }
 
         private void iterationCountTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }

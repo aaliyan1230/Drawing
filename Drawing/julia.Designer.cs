@@ -41,6 +41,8 @@ namespace Drawing {
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdb = new System.Windows.Forms.Button();
+            this.dbb = new System.Windows.Forms.Button();
             this.statusLabel = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.zoomTextBox = new System.Windows.Forms.TextBox();
@@ -54,9 +56,13 @@ namespace Drawing {
             this.saveImageButton = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // generatePatternButton
@@ -195,6 +201,8 @@ namespace Drawing {
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.groupBox1.Controls.Add(this.rdb);
+            this.groupBox1.Controls.Add(this.dbb);
             this.groupBox1.Controls.Add(this.statusLabel);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.zoomTextBox);
@@ -223,10 +231,32 @@ namespace Drawing {
             this.groupBox1.Text = "Configuration";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
+            // rdb
+            // 
+            this.rdb.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
+            this.rdb.Location = new System.Drawing.Point(76, 429);
+            this.rdb.Name = "rdb";
+            this.rdb.Size = new System.Drawing.Size(64, 33);
+            this.rdb.TabIndex = 29;
+            this.rdb.Text = "Retrieve";
+            this.rdb.UseVisualStyleBackColor = false;
+            this.rdb.Click += new System.EventHandler(this.rdb_Click);
+            // 
+            // dbb
+            // 
+            this.dbb.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
+            this.dbb.Location = new System.Drawing.Point(6, 429);
+            this.dbb.Name = "dbb";
+            this.dbb.Size = new System.Drawing.Size(64, 33);
+            this.dbb.TabIndex = 28;
+            this.dbb.Text = "Save";
+            this.dbb.UseVisualStyleBackColor = false;
+            this.dbb.Click += new System.EventHandler(this.dbb_Click);
+            // 
             // statusLabel
             // 
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(2, 422);
+            this.statusLabel.Location = new System.Drawing.Point(2, 412);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(47, 13);
             this.statusLabel.TabIndex = 24;
@@ -270,9 +300,9 @@ namespace Drawing {
             this.exitbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
             this.exitbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.exitbtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
-            this.exitbtn.Location = new System.Drawing.Point(884, -6);
+            this.exitbtn.Location = new System.Drawing.Point(883, 3);
             this.exitbtn.Name = "exitbtn";
-            this.exitbtn.Size = new System.Drawing.Size(57, 33);
+            this.exitbtn.Size = new System.Drawing.Size(58, 24);
             this.exitbtn.TabIndex = 24;
             this.exitbtn.Text = "Exit";
             this.exitbtn.UseVisualStyleBackColor = false;
@@ -354,6 +384,7 @@ namespace Drawing {
             this.textBox1.Size = new System.Drawing.Size(83, 20);
             this.textBox1.TabIndex = 25;
             this.textBox1.Text = "-0.7";
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // textBox2
             // 
@@ -364,12 +395,46 @@ namespace Drawing {
             this.textBox2.TabIndex = 26;
             this.textBox2.Text = "0.27015";
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(86, 92);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(652, 422);
+            this.dataGridView1.TabIndex = 27;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
+            this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.label7.Location = new System.Drawing.Point(752, 33);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(21, 13);
+            this.label7.TabIndex = 30;
+            this.label7.Text = "Cx";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
+            this.label9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.label9.Location = new System.Drawing.Point(752, 77);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(21, 13);
+            this.label9.TabIndex = 31;
+            this.label9.Text = "Cy";
+            // 
             // julia
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(989, 652);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.exitbtn);
@@ -391,6 +456,7 @@ namespace Drawing {
             this.groupBox2.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -441,6 +507,11 @@ namespace Drawing {
         private System.Windows.Forms.Button exitbtn;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button rdb;
+        private System.Windows.Forms.Button dbb;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label9;
     }
 }
 

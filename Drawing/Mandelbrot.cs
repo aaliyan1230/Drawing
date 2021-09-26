@@ -12,11 +12,13 @@ using System.Drawing.Drawing2D;
 using System.Data.OleDb;
 
 
-
-
-
 namespace Drawing {
+
+    /// Mandelbrot class extends Form, used to render the Mandelbrot set,
+    /// with user controls allowing selection of the region to plot,
+    /// resolution, maximum iteration count etc.
     
+
     public partial class Mandelbrot : Form {
 
 
@@ -68,16 +70,23 @@ namespace Drawing {
         private string userName;                                    // User name.
         private ColourTable colourTable = null;                     // Colour table.
 
-        /// <summary>
+        //OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Mandelbrot.accdb");
+        //OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=D:\c#\Mandelbrot\Drawing\Mandelbrot.accdb");
+        DataSet d1 = new DataSet();
+
+
         /// Load the main form for this application.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void Form1_Load(object sender, EventArgs e) {
-            con.Open();
+           // con.Open();
             dataGridView1.Hide();
-           
+            // Get current user name. Used to manage their favourites (file storage),
+            // and also undo-history storage.
             userName = Environment.UserName;
+           
+
+
+            // Create graphics object for Mandelbrot rendering.
             myBitmap = new Bitmap(ClientRectangle.Width,
                                   ClientRectangle.Height,
                                   System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -85,45 +94,100 @@ namespace Drawing {
             g.Clear(Color.Frmanage omArgb(46,51,73));
 
             zoomCheckbox.Hide();
-            undoButton.Hide();
-
-            // Initialise the user's favourites storage.
-            Directory.CreateDirectory(@"C:\Users\" + userName + "\\mandelbrot_config\\Fav\\");
-            Directory.CreateDirectory(@"C:\Users\" + userName + "\\mandelbrot_config\\Undo\\");
-            Directory.CreateDirectory(@"C:\Users\" + userName + "\\mandelbrot_config\\Images\\");
-            Array.ForEach(Directory.GetFiles(@"c:\Users\" + userName + "\\mandelbrot_config\\Undo\\"), File.Delete);
-            DirectoryInfo dinfo = new DirectoryInfo(@"C:\Users\" + userName + "\\mandelbrot_config\\Fav\\");
-            FileInfo[] Files = dinfo.GetFiles("*.txt");
-            foreach (FileInfo file in Files) {
-                string name = file.Name.Substring(0, file.Name.LastIndexOf(".txt", StringComparison.OrdinalIgnoreCase));
-                if (name.Equals("")) {
-                    File.Delete(@"C:\Users\" + userName + "\\mandelbrot_config\\Fav\\.txt");
-                } 
-            }
-
-            // Initialize undo.
-            StreamWriter writer = new StreamWriter(@"C:\Users\" + userName + "\\mandelbrot_config\\Undo\\undo" + (undoNum -= 1) + ".txt");
-            writer.Write(pixelStepTextBox.Text +
-                Environment.NewLine +
-                iterationCountTextBox.Text +
-                Environment.NewLine +
-                yMinCheckBox.Text +
-                Environment.NewLine +
-                yMaxCheckBox.Text +
-                Environment.NewLine +
-                xMinCheckBox.Text +
-                Environment.NewLine +
-                xMaxCheckBox.Text);
-            writer.Close();
-            writer.Dispose();
+            undoButton.Hide();   
         }
 
-        /// <summary>
+        int count = 0;
+
+        private void dbb_Click(object sender, EventArgs e)
+        {
+            //string connetionString = null;
+            //OleDbConnection connection;
+            OleDbDataAdapter oledbAdapter;
+            DataSet ds = new DataSet();
+            string replacement = @"\Drawing\bin\Release";
+            string path = Path.Combine(Directory.GetCurrentDirectory());
+            path = path.Replace(replacement, "");
+            string connectionString = $@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = {path}\Mandelbrot.accdb";
+            string sql = "select * from DataPts";
+            OleDbConnection connection = new OleDbConnection(connectionString);
+            //connection.Open();
+            try
+            {
+                connection.Open();
+                oledbAdapter = new OleDbDataAdapter(sql, connection);
+                oledbAdapter.Fill(ds, "DataPts");
+                oledbAdapter.Dispose();
+                connection.Close();
+                count = ds.Tables[0].Rows.Count + 1;
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Can not open connection ! ");
+            }
+
+            connection.Open();
+            OleDbCommand com = new OleDbCommand("insert into DataPts(Num, yMin, yMax, xMin, xMax, iterations) values('" + count + "','" + yMinCheckBox.Text + "','" + yMaxCheckBox.Text + "','" + xMinCheckBox.Text + "','" + xMaxCheckBox.Text + "','"+ iterationCountTextBox.Text +  "' )", connection);
+            com.ExecuteNonQuery();
+            MessageBox.Show("Points have been saved");
+            connection.Close();
+        }
+
+        private void rdb_Click(object sender, EventArgs e)
+        {
+           
+            DataTable d = new DataTable();
+            string replacement = @"\Drawing\bin\Release";
+            string path = Path.Combine(Directory.GetCurrentDirectory());
+            path = path.Replace(replacement, "");
+            string connectionString = $@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = {path}\Mandelbrot.accdb";
+            string sql = "select * from DataPts";
+            OleDbConnection connection = new OleDbConnection(connectionString);
+            connection.Open();
+            OleDbDataAdapter adap = new OleDbDataAdapter("select * from DataPts", $@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source={path}\Mandelbrot.accdb");
+            adap.Fill(d/*,"DataPts"*/);
+            dataGridView1.DataSource = d;
+            dataGridView1.Show();
+            /*       adap.Fill(d1*//*, "DataPts"*//*);
+                   dataGrid1.DataSource = d1.Tables[0];*/
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+            {
+                dataGridView1.CurrentRow.Selected = true;
+                yMinCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["yMin"].FormattedValue.ToString();
+                yMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["yMax"].FormattedValue.ToString();
+                xMinCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMin"].FormattedValue.ToString();
+                xMaxCheckBox.Text = dataGridView1.Rows[e.RowIndex].Cells["xMax"].FormattedValue.ToString();
+                iterationCountTextBox.Text = dataGridView1.Rows[e.RowIndex].Cells["iterations"].FormattedValue.ToString();
+            }
+            dataGridView1.Hide();
+            /*
+                       int ss = e.RowIndex ;
+                        OleDbCommand com = new OleDbCommand("select * from DataPts where [Num] =  "+count+"", con);
+                        OleDbDataReader d2 = com.ExecuteReader();
+                        while (d2.Read())
+                        {
+                            yMinCheckBox.Text = (d2["yMin"].ToString());
+                            yMaxCheckBox.Text = (d2["yMax"].ToString());
+                            xMinCheckBox.Text = (d2["xMin"].ToString());
+                            xMaxCheckBox.Text = (d2["xMax"].ToString());
+                        }*/
+        }
+
+
+
+
+
+
         /// On-click handler for generate button. Triggers rendering of the Mandelbrot
         /// set using current configuration settings.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
+
         private void generate_Click(object sender, EventArgs e) {
             RenderImage();
         }
@@ -211,7 +275,7 @@ namespace Drawing {
                         ComplexPoint c = new ComplexPoint(x, y);
 
                         // Initialise complex value Zk.
-                        ComplexPoint zk = new ComplexPoint(0, 0);
+                        ComplexPoint zk = new ComplexPoint(0.0, 0.0);
 
                         
                         int k = 0;
@@ -281,17 +345,24 @@ namespace Drawing {
                 stopwatchLabel.Text = Convert.ToString(sw.Elapsed.TotalSeconds);
                 statusLabel.Text = "Status: Render complete";
 
-             
                 StreamWriter writer = new StreamWriter(@"C:\Users\" + userName + "\\mandelbrot_config\\Undo\\undo" + undoNum + ".txt");
                 writer.Write(pixelStepTextBox.Text + Environment.NewLine + iterationCountTextBox.Text + Environment.NewLine + yMinCheckBox.Text + Environment.NewLine + yMaxCheckBox.Text + Environment.NewLine + xMinCheckBox.Text + Environment.NewLine + xMaxCheckBox.Text);
                 writer.Close();
                 writer.Dispose();
+
             } catch (Exception e2) {
                 MessageBox.Show("Exception Trapped: " + e2.Message, "Error");
                 statusLabel.Text = "Status: Error";
             }
         }
 
+   
+        /// Convert HSL colour value to Color object.
+ 
+        /// <param name="H">Hue</param>
+        /// <param name="S">Saturation</param>
+        /// <param name="L">Lightness</param>
+        /// <returns>Color object</returns>
         private static Color colorFromHSLA(double H, double S, double L) {
             double v;
             double r, g, b;
@@ -300,6 +371,8 @@ namespace Drawing {
             g = L;
             b = L;
 
+            // Standard HSL to RGB conversion. This is described in
+           
             v = (L <= 0.5) ? (L * (1.0 + S)) : (L + S - L * S);
 
             if (v > 0) {
@@ -362,7 +435,11 @@ namespace Drawing {
             
         }
 
+  
+        /// On-click handler for main form. Defines the points (lower-left and upper-right)
+        /// of a zoom rectangle.
     
+  
         private void mouseClickOnForm(object sender, MouseEventArgs e) {
             if (zoomCheckbox.Checked) {
                 Pen box = new Pen(Color.Black);
@@ -419,8 +496,32 @@ namespace Drawing {
             }
         }
 
+    
+        /// This will apply the zoom rectangle coordinates to the
+        /// yMin yMax, xMin xMax text boxes.
+        
+        private void button2_Click(object sender, EventArgs e) {
+            yMinCheckBox.Text = Convert.ToString(zoomCoord1.y);
+            yMaxCheckBox.Text = Convert.ToString(zoomCoord2.y);
+            xMinCheckBox.Text = Convert.ToString(zoomCoord1.x);
+            xMaxCheckBox.Text = Convert.ToString(zoomCoord2.x);
+        }
 
-     
+       
+        /// This reads the selected text file, and sets the xMin xMax, yMin yMax text
+        /// boxes to the coordinates in the text file.
+      
+
+       
+        /// When the dropdown list is opened, it will check for empty favourite names
+        /// and delete them.
+      
+       
+
+        
+        /// When the undo button is clicked, the last settings are read from
+        /// the last undo text file, and the text boxes are set to these settings.
+       
         private void undo_Click(object sender, EventArgs e) {
             try {
                 var fileContent = File.ReadAllText(@"C:\Users\" + userName + "\\mandelbrot_config\\Undo\\undo" + (undoNum -= 1) + ".txt");
@@ -437,6 +538,9 @@ namespace Drawing {
             }
         }
 
+
+        /// Class used for colour lookup table.
+   
         private class ColourTable {
             public int kMax;
             public int nColour;
@@ -456,7 +560,9 @@ namespace Drawing {
                 }
             }
 
-          
+
+            /// Retrieve the colour from iteration count k.
+    
             public Color GetColour(int k) {
                 return colourTable[k];
             } 
@@ -470,9 +576,13 @@ namespace Drawing {
         }
 
         // Button used to save bitmap at desired location. File type is defaulted as Portable Network Graphics.
-        private void saveImageButton_Click(object sender, EventArgs e) {
+        private void saveImageButton_Click(object sender, EventArgs e)
+        {
             //myBitmap.Save(@"C:\Users\" + userName + "\\mandelbrot_config\\Images\\" + saveImageTextBox.Text + ".png");
-            myBitmap.Save(@"D:\\c#\\images\\" + saveImageTextBox.Text + ".png");
+            string replacement = @"\Drawing\bin\Release";
+            string path = Path.Combine(Directory.GetCurrentDirectory());
+            path = path.Replace(replacement, "");
+            myBitmap.Save($@"{path}\\images\\" + saveImageTextBox.Text + ".png");
             MessageBox.Show("image saved!");
         }
 
@@ -501,5 +611,9 @@ namespace Drawing {
 
         }
 
-      }
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+    }
 }

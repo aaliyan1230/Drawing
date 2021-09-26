@@ -154,7 +154,7 @@ namespace Drawing
 
                // g.FillEllipse(brush, e.X - 2, e.Y - 2, 5, 5);
               
-                initial = new ComplexPoint(0.0, 0.0);
+                initial = new ComplexPoint(Convert.ToInt32(textBox2.Text), Convert.ToInt32(textBox3.Text));
                 Point initial_pt = comp_to_pt(initial);
                 g.DrawLine(pp, 300, 300, pt1.X, pt1.Y);
                
@@ -168,7 +168,7 @@ namespace Drawing
                     }
                     else if (i==1)
                     {
-                        brush = new SolidBrush(Color.FromArgb(90,196,90));
+                        brush = new SolidBrush(Color.DeepPink);
                     }
                     else
                     {
@@ -220,6 +220,11 @@ namespace Drawing
         }
 
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
         }
