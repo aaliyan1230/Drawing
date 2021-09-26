@@ -82,7 +82,7 @@ namespace Drawing {
                                   ClientRectangle.Height,
                                   System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             g = Graphics.FromImage(myBitmap);
-            g.Clear(Color.FromArgb(46,51,73));
+            g.Clear(Color.Frmanage omArgb(46,51,73));
 
             zoomCheckbox.Hide();
             undoButton.Hide();
